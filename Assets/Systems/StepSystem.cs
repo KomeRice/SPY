@@ -63,6 +63,7 @@ public class StepSystem : FSystem {
             if (timeStepCpt <= 0)
             {
                 GameObjectManager.addComponent<NewStep>(MainLoop.instance.gameObject);
+                Debug.Log("StepSystem: NewStep initiated");
                 gameData.totalStep++;
                 nbStep++;
                 if (newStepAskedByPlayer)

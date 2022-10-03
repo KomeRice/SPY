@@ -48,7 +48,8 @@ public class DetectorManager : FSystem {
 				if (target.GetComponent<Detector>() != null){
 					//end level
 					GameObjectManager.addComponent<NewEnd>(MainLoop.instance.gameObject, new { endType = NewEnd.Detected });
-				}
+                    Debug.Log($"DetectorManager: {robot.name} detected player");
+                }
 			}			
 		}
     }
