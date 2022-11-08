@@ -73,10 +73,7 @@ public class HighLightSystem : FSystem {
 			go.GetComponent<Image>().color = go.GetComponent<BaseElement>().highlightedColor;
 		// third sensitive UI inside library panel
 		else if (go.GetComponent<ElementToDrag>() && go.GetComponent<PointerOver>())
-		{
 			go.GetComponent<Image>().color = go.GetComponent<Highlightable>().highlightedColor;
-			Debug.Log("HighLightSystem: Inventory item hovered");
-		}
 		// then process world GameObjects (Walls, drone, robots...)
 		else if (go.GetComponentInChildren<Renderer>()){
 			go.GetComponentInChildren<Renderer>().material.color = go.GetComponent<Highlightable>().highlightedColor;

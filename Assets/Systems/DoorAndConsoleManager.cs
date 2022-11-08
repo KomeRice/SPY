@@ -70,7 +70,6 @@ public class DoorAndConsoleManager : FSystem {
 					slotGo.transform.parent.GetComponent<Animator>().SetTrigger("Open");
 					slotGo.transform.parent.GetComponent<Animator>().speed = gameData.gameSpeed_current;
 					updatePathColor(id, false);
-					Debug.Log("DoorAndConsoleManager: Door opened");
 				}
 			}
 		}
