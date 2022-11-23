@@ -8,6 +8,7 @@ public class EditorGridSystem_wrapper : BaseWrapper
 	public UnityEngine.Tilemaps.Tile wallTile;
 	public UnityEngine.Tilemaps.Tile spawnTile;
 	public UnityEngine.Tilemaps.Tile teleportTile;
+	public UnityEngine.Texture2D placingCursor;
 	private void Start()
 	{
 		this.hideFlags = HideFlags.NotEditable;
@@ -16,6 +17,7 @@ public class EditorGridSystem_wrapper : BaseWrapper
 		MainLoop.initAppropriateSystemField (system, "wallTile", wallTile);
 		MainLoop.initAppropriateSystemField (system, "spawnTile", spawnTile);
 		MainLoop.initAppropriateSystemField (system, "teleportTile", teleportTile);
+		MainLoop.initAppropriateSystemField (system, "placingCursor", placingCursor);
 	}
 
 }
