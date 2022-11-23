@@ -39,15 +39,16 @@ public class EditorGridSystem : FSystem {
 	}
 
 	// Use to process your families.
-	protected override void onProcess(int familiesUpdateCount) {
-		if (Input.GetMouseButtonDown(0))
-		{
-			var pos = mousePosToGridPos();
-			Debug.Log($"Mouse on tile {pos.x}, {pos.y}");
-		}
+	protected override void onProcess(int familiesUpdateCount)
+	{
+		if (!Input.GetMouseButtonDown(0)) 
+			return;
+		
+		var pos = mousePosToGridPos();
+		Debug.Log($"Mouse on tile {pos.x}, {pos.y}");
 	}
 
-	public void initGrid(int width = 16, int height = 10)
+	private void initGrid(int width = 16, int height = 10)
 	{
 		_editorGrid = new Cell[width, height];
 		for (var i = 0; i < _editorGrid.GetLength(0); ++i)
