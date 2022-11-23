@@ -75,7 +75,7 @@ public class MoveSystem : FSystem {
 
 	// Use to process your families.
 	protected override void onProcess(int familiesUpdateCount) {
-
+		
 		foreach (GameObject go in f_movable)
 		{
 			// Manage position

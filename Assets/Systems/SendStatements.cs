@@ -77,14 +77,42 @@ public class SendStatements : FSystem {
             }
         }
 	}
-
-    public void testSendStatement()
+    
+    public void templateStatement()
     {
-        Debug.Log(GBL_Interface.playerName + " asks to send statement...");
         GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new
         {
-            verb = "interacted",
-            objectType = "menu"
+            verb = "availableVerb",
+            objectType = "availableActivity",
+            activityExtensions = new Dictionary<string, string>() {
+                { "availableExtension1", "myContent1" },
+                { "availableExtension2", "myContent2" }
+            }
+        });
+    }
+    
+    public void LoadLevelStatement(string levelNumber)
+    {
+        GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
+        {
+            verb = "loaded",
+            objectType = "level",
+            activityExtensions = new Dictionary<string, string>() {
+                { "level_number", levelNumber }
+            }
+        });
+    }
+
+    public void LevelCompleteStatement(string levelNumber, string time)
+    {
+        GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
+        {
+            verb = "completed",
+            objectType = "level",
+            activityExtensions = new Dictionary<string, string>() {
+                { "level_number", levelNumber },
+                { "time", time }
+            }
         });
     }
 }

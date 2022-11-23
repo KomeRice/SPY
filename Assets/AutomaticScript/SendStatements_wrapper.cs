@@ -13,9 +13,9 @@ public class SendStatements_wrapper : BaseWrapper
 		MainLoop.callAppropriateSystemMethod (system, "initGBLXAPI", null);
 	}
 
-	public void testSendStatement()
+	public void templateStatement()
 	{
-		MainLoop.callAppropriateSystemMethod (system, "testSendStatement", null);
+		MainLoop.callAppropriateSystemMethod (system, "templateStatement", null);
 	}
 
 }
