@@ -46,8 +46,10 @@ public class EditorGridSystem : FSystem {
 			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 			return;
 		}
-
-		Cursor.SetCursor(placingCursor, Vector2.zero, CursorMode.Auto);
+		
+		if(placingCursor != null)
+			Cursor.SetCursor(placingCursor, new Vector2(placingCursor.width / 2.0f, placingCursor.height / 2.0f), CursorMode.Auto);
+		
 		if(Input.GetMouseButton(0))
 			setTile(pos.x, pos.y, getActiveBrush());
 	}
