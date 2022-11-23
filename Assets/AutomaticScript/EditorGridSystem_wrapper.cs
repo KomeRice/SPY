@@ -3,7 +3,6 @@ using FYFY;
 
 public class EditorGridSystem_wrapper : BaseWrapper
 {
-	public UnityEngine.Tilemaps.Tilemap tilemap;
 	public UnityEngine.Tilemaps.Tile voidTile;
 	public UnityEngine.Tilemaps.Tile floorTile;
 	public UnityEngine.Tilemaps.Tile wallTile;
@@ -12,7 +11,6 @@ public class EditorGridSystem_wrapper : BaseWrapper
 	private void Start()
 	{
 		this.hideFlags = HideFlags.NotEditable;
-		MainLoop.initAppropriateSystemField (system, "tilemap", tilemap);
 		MainLoop.initAppropriateSystemField (system, "voidTile", voidTile);
 		MainLoop.initAppropriateSystemField (system, "floorTile", floorTile);
 		MainLoop.initAppropriateSystemField (system, "wallTile", wallTile);

@@ -5,26 +5,25 @@ using UnityEngine.Tilemaps;
 public class EditorGridSystem : FSystem {
 
 	public static EditorGridSystem instance;
-	public Tilemap tilemap;
 	public Tile voidTile;
 	public Tile floorTile;
 	public Tile wallTile;
 	public Tile spawnTile;
 	public Tile teleportTile;
 	
-	private Cell[,] _editorGrid;
-	private Vector3Int gridSize;
+	private Vector3Int _gridSize;
+	private Family f_paintables = FamilyManager.getFamily(new AllOfComponents(typeof(PaintableGrid)));
 
 	public EditorGridSystem()
 	{
 		instance = this;
-		_editorGrid = null;
 	}
 	
 	// Use to init system before the first onProcess call
 	protected override void onStart()
 	{
-		gridSize = tilemap.size;
+		var tilemapGo = getTilemap();
+		_gridSize = tilemapGo.GetComponent<Tilemap>().size;
 		initGrid();
 	}
 
@@ -50,10 +49,10 @@ public class EditorGridSystem : FSystem {
 
 	private void initGrid(int width = 16, int height = 10)
 	{
-		_editorGrid = new Cell[width, height];
-		for (var i = 0; i < _editorGrid.GetLength(0); ++i)
+		getTilemap().GetComponent<PaintableGrid>().grid = new Cell[width, height];
+		for (var i = 0; i < width; ++i)
 		{
-			for (var j = 0; j < _editorGrid.GetLength(1); ++j)
+			for (var j = 0; j < height; ++j)
 			{
 				if (i == 0 && j == 0)
 				{
@@ -69,20 +68,21 @@ public class EditorGridSystem : FSystem {
 	private Vector2Int mousePosToGridPos()
 	{
 		var pos = Camera.main!.ScreenToWorldPoint(Input.mousePosition);
-		var tilePos = tilemap.WorldToCell(pos);
+		var tilePos = getTilemap().GetComponent<Tilemap>().WorldToCell(pos);
 		return vector3ToGridPos(tilePos);
 	}
 
 	private Vector2Int vector3ToGridPos(Vector3Int vec)
 	{
-		return new Vector2Int(vec.x + gridSize.x, gridSize.y - vec.y);
+		return new Vector2Int(vec.x + _gridSize.x, _gridSize.y - vec.y);
 	}
 
 	private void setTile(int x, int y, Cell cell)
 	{
-		_editorGrid[x, y] = cell;
-		tilemap.SetTile(new Vector3Int(x - gridSize.x, gridSize.y - y, 0), cellToTile(cell));
-		Debug.Log($"Set tile: {x - gridSize.x}, {gridSize.y - y} to tile");
+		var tilemapGo = getTilemap();
+		tilemapGo.GetComponent<PaintableGrid>().grid[x, y] = cell;
+		tilemapGo.GetComponent<Tilemap>().SetTile(new Vector3Int(x - _gridSize.x, _gridSize.y - y, 0), cellToTile(cell));
+		Debug.Log($"Set tile: {x - _gridSize.x}, {_gridSize.y - y} to tile");
 	}
 
 	private Tile cellToTile(Cell cell)
@@ -98,12 +98,18 @@ public class EditorGridSystem : FSystem {
 		};
 	}
 
-	private enum Cell
+	// Calls to this could be reduced
+	private GameObject getTilemap()
 	{
-		Void = -1,
-		Ground = 0,
-		Wall = 1,
-		Spawn = 2,
-		Teleport = 3
+		return f_paintables.First();
 	}
+
+}
+public enum Cell
+{ 
+	Void = -1,
+	Ground = 0, 
+	Wall = 1, 
+	Spawn = 2, 
+	Teleport = 3
 }
