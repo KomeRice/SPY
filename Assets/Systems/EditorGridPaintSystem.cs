@@ -45,24 +45,8 @@ public class EditorGridPaintSystem : FSystem {
 	// Use to process your families.
 	protected override void onProcess(int familiesUpdateCount)
 	{
-		var pos = mousePosToGridPos();
-		if(0 < pos.x || pos.x >= _gridSize.x || 0 < pos.y || _gridSize.y >= pos.y || getActiveBrush() == Cell.Select)
-			return;
-		
 	}
 	
-	private Vector2Int mousePosToGridPos()
-	{
-		var pos = Camera.main!.ScreenToWorldPoint(Input.mousePosition);
-		var tilePos = getTilemap().GetComponent<Tilemap>().WorldToCell(pos);
-		return vector3ToGridPos(tilePos);
-	}
-
-	private Vector2Int vector3ToGridPos(Vector3Int vec)
-	{
-		return new Vector2Int(vec.x + _gridSize.x / 2, _gridSize.y / 2 + vec.y * -1);
-	}
-
 	public void setBrush(GameObject go)
 	{
 		getTilemap().GetComponent<PaintableGrid>().activeBrush = go.GetComponent<CellBrush>().brush;

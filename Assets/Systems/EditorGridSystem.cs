@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using FYFY;
 using UnityEngine.Tilemaps;
@@ -10,7 +12,14 @@ public class EditorGridSystem : FSystem {
 	public Tile wallTile;
 	public Tile spawnTile;
 	public Tile teleportTile;
+	public Tile playerTile;
+	public Tile enemyTile;
+	public Tile decoTile;
+	public Tile doorTile;
+	public Tile consoleTile;
+	public Tile coinTile;
 	public Texture2D placingCursor;
+	public string defaultDecoration;
 	
 	private Vector2Int _gridSize;
 	private Family f_paintables = FamilyManager.getFamily(new AllOfComponents(typeof(PaintableGrid)));
@@ -24,6 +33,7 @@ public class EditorGridSystem : FSystem {
 	protected override void onStart()
 	{
 		var tilemapGo = getTilemap();
+		getTilemap().GetComponent<PaintableGrid>().floorObjects = new Dictionary<Tuple<int, int>, FloorObject>();
 		initGrid();
 	}
 
@@ -41,7 +51,8 @@ public class EditorGridSystem : FSystem {
 	protected override void onProcess(int familiesUpdateCount)
 	{
 		var pos = mousePosToGridPos();
-		if (0 > pos.x || pos.x >= _gridSize.x || 0 > pos.y || pos.y >= _gridSize.y || getActiveBrush() == Cell.Select)
+		if (0 > pos.x || pos.x >= _gridSize.x || 0 > pos.y || pos.y >= _gridSize.y || getActiveBrush() == Cell.Select
+		    || !canBePlaced(getActiveBrush(), pos.x, pos.y))
 		{
 			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 			return;
@@ -49,12 +60,19 @@ public class EditorGridSystem : FSystem {
 		
 		if(placingCursor != null)
 			Cursor.SetCursor(placingCursor, new Vector2(placingCursor.width / 2.0f, placingCursor.height / 2.0f), CursorMode.Auto);
-		
-		if(Input.GetMouseButton(0))
+
+		if (Input.GetMouseButtonDown(0) && (int)getActiveBrush() >= 10000)
+		{
 			setTile(pos.x, pos.y, getActiveBrush());
+		}
+		else if(Input.GetMouseButton(0))
+			setTile(pos.x, pos.y, getActiveBrush());
+		else if(Input.GetMouseButtonDown(1) && getTilemap().GetComponent<PaintableGrid>().
+			        floorObjects.ContainsKey(new Tuple<int, int>(pos.x, pos.y)))
+			resetTile(pos.x, pos.y, -1);
 	}
 
-	private void initGrid(int width = 9, int height = 9)
+	private void initGrid(int width = 16, int height = 10)
 	{
 		_gridSize = new Vector2Int(width, height);
 		getTilemap().GetComponent<PaintableGrid>().grid = new Cell[width, height];
@@ -88,9 +106,45 @@ public class EditorGridSystem : FSystem {
 	public void setTile(int x, int y, Cell cell)
 	{
 		var tilemapGo = getTilemap();
-		tilemapGo.GetComponent<PaintableGrid>().grid[x, y] = cell;
-		tilemapGo.GetComponent<Tilemap>().SetTile(new Vector3Int(x - _gridSize.x / 2,_gridSize.y / 2 - y, 0), cellToTile(cell));
+		if ((int)cell < 10000)
+		{
+			tilemapGo.GetComponent<PaintableGrid>().grid[x, y] = cell;
+			if (cell != Cell.Ground)
+			{
+				resetTile(x, y, -1);
+			}
+		}
+		else
+		{
+			tilemapGo.GetComponent<PaintableGrid>().floorObjects[new Tuple<int, int>(x, y)] = 
+				cell switch
+				{
+					Cell.Player => new FloorObject(Cell.Player, ObjectDirection.Up, x, y),
+					Cell.Enemy => new FloorObject(Cell.Enemy, ObjectDirection.Up, x, y),
+					Cell.Decoration => new DecorationObject(defaultDecoration, ObjectDirection.Up, x, y),
+					Cell.Door => new Door(ObjectDirection.Up, x, y, 0),
+					Cell.Console => new Console(ObjectDirection.Up, x, y, 0, true),
+					Cell.Coin => new FloorObject(Cell.Coin, ObjectDirection.Up, x, y),
+					_ => null
+				};
+		}
+		
+		tilemapGo.GetComponent<Tilemap>().SetTile(new Vector3Int(x - _gridSize.x / 2,
+			_gridSize.y / 2 - y, 
+			(int) cell < 10000 ? 0 : -1), 
+			cellToTile(cell));
 		Debug.Log($"Set tile: {x}, {y} to tile");
+	}
+
+	public void resetTile(int x, int y, int z)
+	{
+		var tilemapGo = getTilemap();
+		tilemapGo.GetComponent<PaintableGrid>().floorObjects.Remove(new Tuple<int, int>(x, y));
+		tilemapGo.GetComponent<Tilemap>().SetTile(new Vector3Int(x - _gridSize.x / 2,
+			_gridSize.y / 2 - y, 
+			z), 
+			null);
+		
 	}
 
 	private Tile cellToTile(Cell cell)
@@ -102,6 +156,12 @@ public class EditorGridSystem : FSystem {
 			Cell.Wall => wallTile,
 			Cell.Spawn => spawnTile,
 			Cell.Teleport => teleportTile,
+			Cell.Player => playerTile,
+			Cell.Enemy => enemyTile,
+			Cell.Decoration => decoTile,
+			Cell.Door => doorTile,
+			Cell.Console => consoleTile,
+			Cell.Coin => coinTile,
 			_ => null
 		};
 	}
@@ -116,7 +176,14 @@ public class EditorGridSystem : FSystem {
 	{
 		return getTilemap().GetComponent<PaintableGrid>().activeBrush;
 	}
+
+	private bool canBePlaced(Cell cell, int x, int y)
+	{
+		var curCell = getTilemap().GetComponent<PaintableGrid>().grid[x, y];
+		return (int)cell < 10000 || curCell == Cell.Ground || (curCell == Cell.Spawn && cell == Cell.Player);
+	}
 }
+
 public enum Cell
 { 
 	Void = -1,
@@ -124,5 +191,75 @@ public enum Cell
 	Wall = 1, 
 	Spawn = 2, 
 	Teleport = 3,
-	Select = -10000
+	Select = -10000,
+	Player = 10000,
+	Enemy = 10001,
+	Decoration = 10002,
+	Door = 10003,
+	Console = 10004,
+	Coin = 10005
+}
+
+public enum ObjectDirection
+{
+	Up = 0,
+	Down = 1,
+	Right = 2,
+	Left = 3
+}
+
+public enum EnemyTypeRange
+{
+	LineView = 0,
+	//The following two are unimplemented
+	ConeView = 1,
+	AroundView = 2
+}
+
+public class FloorObject
+{
+	public Cell type;
+	public ObjectDirection orientation;
+	public int x;
+	public int y;
+
+	public FloorObject(Cell type, ObjectDirection orientation, int x, int y)
+	{
+		this.type = type;
+		this.orientation = orientation;
+		this.x = x;
+		this.y = y;
+	}
+}
+
+public class DecorationObject : FloorObject
+{
+	public string name;
+
+	public DecorationObject(string name, ObjectDirection orientation, int x, int y) : base(Cell.Decoration, orientation, x, y)
+	{
+		this.name = name;
+	}
+}
+
+public class Console : FloorObject
+{
+	public int slot;
+	public bool state;
+
+	public Console(ObjectDirection orientation, int x, int y, int slot, bool state) : base(Cell.Console, orientation, x, y)
+	{
+		this.slot = slot;
+		this.state = state;
+	}
+}
+
+public class Door : FloorObject
+{
+	public int slot;
+
+	public Door(ObjectDirection orientation, int x, int y, int slot) : base(Cell.Door, orientation, x, y)
+	{
+		this.slot = slot;
+	}
 }
