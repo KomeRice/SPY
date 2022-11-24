@@ -115,4 +115,83 @@ public class SendStatements : FSystem {
             }
         });
     }
+
+    public void ActionDraggredStatement(string actionName,string time)
+    {
+        GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
+        {
+            verb = "dragged",
+            objectType = "action",
+            activityExtensions = new Dictionary<string, string>() {
+                { "action_name", actionName },
+                { "time", time }
+            }
+        });
+    }
+
+    public void CharacterMovedStatement(string position, string time, string rotation, string direction)
+    {
+        GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
+        {
+            verb = "moved",
+            objectType = "avatar",
+            activityExtensions = new Dictionary<string, string>() {
+                { "position", position },
+                { "time", time },
+                {"rotation",rotation},
+                {"direction",direction}
+            }
+        });
+    }
+
+    public void CollectedObjetStatement(string ObjectName,string time)
+    {
+        GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
+        {
+            verb = "collected",
+            objectType = "key",
+            activityExtensions = new Dictionary<string, string>() {
+                { "value", ObjectName },
+                { "time", time },
+            }
+        });
+    }
+
+    public void ActivatedDoorStatement(string ObjectName, string time)
+    {
+        GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
+        {
+            verb = "activated",
+            objectType = "key",
+            activityExtensions = new Dictionary<string, string>() {
+                { "value", ObjectName },
+                { "time", time },
+            }
+        });
+    }
+
+    public void HackedRobotStatement(string botId, string time)
+    {
+        GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
+        {
+            verb = "hacked",
+            objectType = "enemyBot",
+            activityExtensions = new Dictionary<string, string>() {
+                { "enemy_bot_name", botId },
+                { "time", time },
+            }
+        });
+    }
+
+    public void ReachedTPStatement(string time)
+    {
+        GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
+        {
+            verb = "reached",
+            objectType = "teleporter",
+            activityExtensions = new Dictionary<string, string>() {
+                { "time", time },
+            }
+        });
+    }
 }

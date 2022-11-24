@@ -18,4 +18,14 @@ public class SendStatements_wrapper : BaseWrapper
 		MainLoop.callAppropriateSystemMethod (system, "templateStatement", null);
 	}
 
+	public void LoadLevelStatement(System.String levelNumber)
+	{
+		MainLoop.callAppropriateSystemMethod (system, "LoadLevelStatement", levelNumber);
+	}
+
+	public void LevelCompleteStatement()
+	{
+		MainLoop.callAppropriateSystemMethod (system, "LevelCompleteStatement", null);
+	}
+
 }
