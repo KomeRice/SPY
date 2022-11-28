@@ -51,13 +51,23 @@ public class EditorGridSystem : FSystem {
 	protected override void onProcess(int familiesUpdateCount)
 	{
 		var pos = mousePosToGridPos();
-		if (0 > pos.x || pos.x >= _gridSize.x || 0 > pos.y || pos.y >= _gridSize.y || getActiveBrush() == Cell.Select
+		if (0 > pos.x || pos.x >= _gridSize.x || 0 > pos.y || pos.y >= _gridSize.y  
 		    || !canBePlaced(getActiveBrush(), pos.x, pos.y))
 		{
 			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 			return;
 		}
-		
+
+		if (Input.GetMouseButtonDown(1) &&
+		    getTilemap().GetComponent<PaintableGrid>().floorObjects.ContainsKey(new Tuple<int, int>(pos.x, pos.y)))
+		{
+			resetTile(pos.x, pos.y, -1);
+			return;
+		}
+
+		if (getActiveBrush() == Cell.Select)
+			return;
+
 		if(placingCursor != null)
 			Cursor.SetCursor(placingCursor, new Vector2(placingCursor.width / 2.0f, placingCursor.height / 2.0f), CursorMode.Auto);
 
@@ -67,9 +77,6 @@ public class EditorGridSystem : FSystem {
 		}
 		else if(Input.GetMouseButton(0))
 			setTile(pos.x, pos.y, getActiveBrush());
-		else if(Input.GetMouseButtonDown(1) && getTilemap().GetComponent<PaintableGrid>().
-			        floorObjects.ContainsKey(new Tuple<int, int>(pos.x, pos.y)))
-			resetTile(pos.x, pos.y, -1);
 	}
 
 	private void initGrid(int width = 16, int height = 10)
