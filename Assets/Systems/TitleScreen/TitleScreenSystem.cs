@@ -11,6 +11,8 @@ using System;
 using UnityEngine.Events;
 using System.Runtime.InteropServices;
 
+
+
 /// <summary>
 /// Manage main menu to launch a specific mission
 /// </summary>
@@ -284,12 +286,25 @@ public class TitleScreenSystem : FSystem {
 			}
 		}
 	}
-
+	
+	public void LoadLevelStatement(string levelNumber)
+	{
+		GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
+		{
+			verb = "loaded",
+			objectType = "level",
+			activityExtensions = new Dictionary<string, string>() {
+				{ "level_number", levelNumber }
+			}
+		});
+	}
+	
 	public void launchLevel(string campaignKey, string levelToLoad) {
 		gameData.scenarioName = campaignKey;
 		gameData.levelToLoad = levelToLoad;
 		gameData.scenario = defaultCampaigns[campaignKey];
 		GameObjectManager.loadScene("MainScene");
+		LoadLevelStatement(levelToLoad);
 	}
 
 	// See Quitter button in editor

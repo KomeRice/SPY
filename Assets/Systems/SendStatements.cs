@@ -91,17 +91,6 @@ public class SendStatements : FSystem {
         });
     }
     
-    public void LoadLevelStatement(string levelNumber)
-    {
-        GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
-        {
-            verb = "loaded",
-            objectType = "level",
-            activityExtensions = new Dictionary<string, string>() {
-                { "level_number", levelNumber }
-            }
-        });
-    }
 
     public void LevelCompleteStatement(string levelNumber, string time)
     {
@@ -116,33 +105,9 @@ public class SendStatements : FSystem {
         });
     }
 
-    public void ActionDraggredStatement(string actionName,string time)
-    {
-        GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
-        {
-            verb = "dragged",
-            objectType = "action",
-            activityExtensions = new Dictionary<string, string>() {
-                { "action_name", actionName },
-                { "time", time }
-            }
-        });
-    }
 
-    public void CharacterMovedStatement(string position, string time, string rotation, string direction)
-    {
-        GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
-        {
-            verb = "moved",
-            objectType = "avatar",
-            activityExtensions = new Dictionary<string, string>() {
-                { "position", position },
-                { "time", time },
-                {"rotation",rotation},
-                {"direction",direction}
-            }
-        });
-    }
+
+
 
     public void CollectedObjetStatement(string ObjectName,string time)
     {
