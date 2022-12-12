@@ -7,4 +7,5 @@ public class PaintableGrid : MonoBehaviour {
 	public Cell[,] grid;
 	public Cell activeBrush;
 	public Dictionary<Tuple<int, int>, FloorObject> floorObjects;
+	public FloorObject selectedObject;
 }

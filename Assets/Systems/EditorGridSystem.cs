@@ -51,31 +51,40 @@ public class EditorGridSystem : FSystem {
 	protected override void onProcess(int familiesUpdateCount)
 	{
 		var pos = mousePosToGridPos();
-		if (0 > pos.x || pos.x >= _gridSize.x || 0 > pos.y || pos.y >= _gridSize.y  
-		    || !canBePlaced(getActiveBrush(), pos.x, pos.y))
+		if (0 > pos.x || pos.x >= _gridSize.x || 0 > pos.y || pos.y >= _gridSize.y || !canBePlaced(getActiveBrush(), pos.x, pos.y))
 		{
 			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 			return;
 		}
 
+		var posTuple = new Tuple<int, int>(pos.x, pos.y);
+		
+		if (getActiveBrush() == Cell.Select)
+		{
+			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+			if (Input.GetMouseButton(0) && getTilemap().GetComponent<PaintableGrid>().floorObjects.ContainsKey(posTuple))
+			{
+				getTilemap().GetComponent<PaintableGrid>().selectedObject =
+					getTilemap().GetComponent<PaintableGrid>().floorObjects[posTuple];
+			}
+			return;
+		}
+		
 		if (Input.GetMouseButtonDown(1) &&
-		    getTilemap().GetComponent<PaintableGrid>().floorObjects.ContainsKey(new Tuple<int, int>(pos.x, pos.y)))
+		    getTilemap().GetComponent<PaintableGrid>().floorObjects.ContainsKey(posTuple))
 		{
 			resetTile(pos.x, pos.y, -1);
 			return;
 		}
 
-		if (getActiveBrush() == Cell.Select)
-			return;
-
 		if(placingCursor != null)
 			Cursor.SetCursor(placingCursor, new Vector2(placingCursor.width / 2.0f, placingCursor.height / 2.0f), CursorMode.Auto);
 
-		if (Input.GetMouseButtonDown(0) && (int)getActiveBrush() >= 10000)
+		if (Input.GetMouseButtonDown(0) && (int) getActiveBrush() >= 10000)
 		{
 			setTile(pos.x, pos.y, getActiveBrush());
 		}
-		else if(Input.GetMouseButton(0))
+		else if(Input.GetMouseButton(0) && (int) getActiveBrush() > -2)
 			setTile(pos.x, pos.y, getActiveBrush());
 	}
 
@@ -187,7 +196,7 @@ public class EditorGridSystem : FSystem {
 	private bool canBePlaced(Cell cell, int x, int y)
 	{
 		var curCell = getTilemap().GetComponent<PaintableGrid>().grid[x, y];
-		return (int)cell < 10000 || curCell == Cell.Ground || (curCell == Cell.Spawn && cell == Cell.Player);
+		return (int) cell < 10000 || curCell == Cell.Ground || (curCell == Cell.Spawn && cell == Cell.Player);
 	}
 }
 
@@ -227,15 +236,17 @@ public class FloorObject
 {
 	public Cell type;
 	public ObjectDirection orientation;
+	public bool orientable;
 	public int x;
 	public int y;
 
-	public FloorObject(Cell type, ObjectDirection orientation, int x, int y)
+	public FloorObject(Cell type, ObjectDirection orientation, int x, int y, bool orientable = true)
 	{
 		this.type = type;
 		this.orientation = orientation;
 		this.x = x;
 		this.y = y;
+		this.orientable = orientable;
 	}
 }
 
