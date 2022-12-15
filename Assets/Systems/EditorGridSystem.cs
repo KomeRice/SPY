@@ -62,7 +62,8 @@ public class EditorGridSystem : FSystem {
 		if (getActiveBrush() == Cell.Select)
 		{
 			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-			if (Input.GetMouseButton(0) && getTilemap().GetComponent<PaintableGrid>().floorObjects.ContainsKey(posTuple))
+			if (Input.GetMouseButtonDown(0) && getTilemap().GetComponent<PaintableGrid>().floorObjects.ContainsKey(posTuple)
+			    && getTilemap().GetComponent<PaintableGrid>().selectedObject == null)
 			{
 				getTilemap().GetComponent<PaintableGrid>().selectedObject =
 					getTilemap().GetComponent<PaintableGrid>().floorObjects[posTuple];

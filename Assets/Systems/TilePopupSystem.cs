@@ -12,13 +12,15 @@ public class TilePopupSystem : FSystem {
 
 	public static TilePopupSystem instance;
 	public GameObject orientationPopup;
+	public GameObject slotPopup;
+	
     private TMP_Text orientationText;
     private RectTransform orientationRectTransform;
     private Image orientationBgImage;
     private Vector2Int _gridsize;
     private List<GameObject> activePopups = new List<GameObject>();
 
-	public TilePopupSystem()
+    public TilePopupSystem()
 	{
 		instance = this;
 	}
@@ -29,7 +31,7 @@ public class TilePopupSystem : FSystem {
 		orientationText = orientationPopup.transform.GetChild(0).GetComponent<TMP_Text>();
 		orientationRectTransform = orientationPopup.GetComponent<RectTransform>();
 		orientationBgImage = orientationPopup.GetComponent<Image>();
-		setOrientationPopupState(false);
+		hideAllPopups();
 		_gridsize = new Vector2Int(getTilemap().GetComponent<PaintableGrid>().grid.GetLength(0),
 			getTilemap().GetComponent<PaintableGrid>().grid.GetLength(1));
 	}
@@ -68,8 +70,10 @@ public class TilePopupSystem : FSystem {
 			switch (getSelected())
 			{
 				case Door d:
+					setSlotPopupState(true);
 					break;
 				case Console c:
+					setSlotPopupState(true);
 					break;
 				case DecorationObject deco:
 					break;
@@ -78,11 +82,12 @@ public class TilePopupSystem : FSystem {
 			if (getSelected().orientable)
 			{
 				setOrientationPopupState(true);
-				activePopups.Add(orientationPopup);
 			}
 		}
 	}
 	
+	// Might not be necessary
+	/*
 	private void setOrientationPopupState(bool enabled)
 	{
 		orientationText.enabled = enabled;
@@ -92,12 +97,46 @@ public class TilePopupSystem : FSystem {
 		{
 			orientationPopup.transform.GetChild(i).gameObject.SetActive(enabled);
 		}
-		
+	}
+	*/
+
+	// Can be factorised
+	private void setOrientationPopupState(bool enabled)
+	{
+		if(enabled)
+			activePopups.Add(orientationPopup);
+		orientationPopup.SetActive(enabled);
+	}
+
+	private void setSlotPopupState(bool enabled)
+	{
+		if (enabled)
+		{
+			activePopups.Add(slotPopup);
+			slotPopup.GetComponentInChildren<InputField>().text = getSelectedSlot().ToString();
+		}
+		else if(getSelected() != null)
+		{
+			switch (getSelected())
+			{
+				case Door d:
+					d.slot = Convert.ToInt32(slotPopup.GetComponentInChildren<InputField>().text);
+					break;
+				case Console c:
+					c.slot = Convert.ToInt32(slotPopup.GetComponentInChildren<InputField>().text);
+					break;
+				default:
+					throw new ArgumentException("Unexpected slot for non slot object");
+			}
+			slotPopup.GetComponentInChildren<InputField>().text = "";
+		}
+		slotPopup.SetActive(enabled);
 	}
 
 	private void hideAllPopups()
 	{
 		setOrientationPopupState(false);
+		setSlotPopupState(false);
 		activePopups.Clear();
 		getTilemap().GetComponent<PaintableGrid>().selectedObject = null;
 	}
@@ -134,6 +173,16 @@ public class TilePopupSystem : FSystem {
 	private FloorObject getSelected()
 	{
 		return getTilemap().GetComponent<PaintableGrid>().selectedObject;
+	}
+
+	private int getSelectedSlot()
+	{
+		return getSelected() switch
+		{
+			Door d => d.slot,
+			Console c => c.slot,
+			_ => throw new ArgumentException("Unexpected slot for non slot object")
+		};
 	}
 
 	private GameObject getTilemap()

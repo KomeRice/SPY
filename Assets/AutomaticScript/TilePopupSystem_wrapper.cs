@@ -4,10 +4,12 @@ using FYFY;
 public class TilePopupSystem_wrapper : BaseWrapper
 {
 	public UnityEngine.GameObject orientationPopup;
+	public UnityEngine.GameObject slotPopup;
 	private void Start()
 	{
 		this.hideFlags = HideFlags.NotEditable;
 		MainLoop.initAppropriateSystemField (system, "orientationPopup", orientationPopup);
+		MainLoop.initAppropriateSystemField (system, "slotPopup", slotPopup);
 	}
 
 	public void rotateSelectionUp()
