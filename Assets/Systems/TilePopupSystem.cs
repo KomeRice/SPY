@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using FYFY;
 using TMPro;
@@ -15,6 +16,7 @@ public class TilePopupSystem : FSystem {
     private RectTransform orientationRectTransform;
     private Image orientationBgImage;
     private Vector2Int _gridsize;
+    private List<GameObject> activePopups = new List<GameObject>();
 
 	public TilePopupSystem()
 	{
@@ -48,22 +50,39 @@ public class TilePopupSystem : FSystem {
 		if (getSelected() == null)
 			return;
 		
-		switch (getSelected())
+		if (activePopups.Count > 0)
 		{
-			case Door d:
-				break;
-			case Console c:
-				break;
-			case DecorationObject deco:
-				break;
+			if (Input.GetMouseButtonDown(0))
+			{
+				foreach (var go in activePopups)
+				{
+					if (go.GetComponent<PopupMouseSensitive>().isOver)
+						return;
+				}
+				
+				hideAllPopups();
+			}
 		}
-
-		if (getSelected().orientable)
+		else if(Input.GetMouseButtonDown(0))
 		{
-			setOrientationPopupState(true);
+			switch (getSelected())
+			{
+				case Door d:
+					break;
+				case Console c:
+					break;
+				case DecorationObject deco:
+					break;
+			}
+
+			if (getSelected().orientable)
+			{
+				setOrientationPopupState(true);
+				activePopups.Add(orientationPopup);
+			}
 		}
 	}
-
+	
 	private void setOrientationPopupState(bool enabled)
 	{
 		orientationText.enabled = enabled;
@@ -73,11 +92,14 @@ public class TilePopupSystem : FSystem {
 		{
 			orientationPopup.transform.GetChild(i).gameObject.SetActive(enabled);
 		}
+		
 	}
 
 	private void hideAllPopups()
 	{
-		return;
+		setOrientationPopupState(false);
+		activePopups.Clear();
+		getTilemap().GetComponent<PaintableGrid>().selectedObject = null;
 	}
 
 	private void rotateObject(ObjectDirection newOrientation, int x, int y)
