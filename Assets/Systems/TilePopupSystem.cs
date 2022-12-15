@@ -13,10 +13,8 @@ public class TilePopupSystem : FSystem {
 	public static TilePopupSystem instance;
 	public GameObject orientationPopup;
 	public GameObject slotPopup;
+	public GameObject scriptNamePopup;
 	
-    private TMP_Text orientationText;
-    private RectTransform orientationRectTransform;
-    private Image orientationBgImage;
     private Vector2Int _gridsize;
     private List<GameObject> activePopups = new List<GameObject>();
 
@@ -28,9 +26,6 @@ public class TilePopupSystem : FSystem {
 	// Use to init system before the first onProcess call
 	protected override void onStart()
 	{
-		orientationText = orientationPopup.transform.GetChild(0).GetComponent<TMP_Text>();
-		orientationRectTransform = orientationPopup.GetComponent<RectTransform>();
-		orientationBgImage = orientationPopup.GetComponent<Image>();
 		hideAllPopups();
 		_gridsize = new Vector2Int(getTilemap().GetComponent<PaintableGrid>().grid.GetLength(0),
 			getTilemap().GetComponent<PaintableGrid>().grid.GetLength(1));
@@ -50,8 +45,12 @@ public class TilePopupSystem : FSystem {
 	protected override void onProcess(int familiesUpdateCount)
 	{
 		if (getSelected() == null)
+		{
+			if(activePopups.Count > 0)
+				hideAllPopups();
 			return;
-		
+		}
+
 		if (activePopups.Count > 0)
 		{
 			if (Input.GetMouseButtonDown(0))
@@ -74,6 +73,9 @@ public class TilePopupSystem : FSystem {
 					break;
 				case Console c:
 					setSlotPopupState(true);
+					break;
+				case PlayerRobot pr:
+					setScriptNamePopupState(true);
 					break;
 				case DecorationObject deco:
 					break;
@@ -125,18 +127,42 @@ public class TilePopupSystem : FSystem {
 				case Console c:
 					c.slot = Convert.ToInt32(slotPopup.GetComponentInChildren<InputField>().text);
 					break;
-				default:
-					throw new ArgumentException("Unexpected slot for non slot object");
 			}
 			slotPopup.GetComponentInChildren<InputField>().text = "";
 		}
 		slotPopup.SetActive(enabled);
+	}
+	
+	private void setScriptNamePopupState(bool enabled)
+	{
+		if (enabled)
+		{
+			activePopups.Add(scriptNamePopup);
+			switch (getSelected())
+			{
+				case PlayerRobot pr:
+					scriptNamePopup.GetComponentInChildren<InputField>().text = pr.associatedScriptName;
+					break;
+			}
+		}
+		else if(getSelected() != null)
+		{
+			switch (getSelected())
+			{
+				case PlayerRobot pr:
+					pr.associatedScriptName = scriptNamePopup.GetComponentInChildren<InputField>().text;
+					break;
+			}
+			scriptNamePopup.GetComponentInChildren<InputField>().text = "";
+		}
+		scriptNamePopup.SetActive(enabled);
 	}
 
 	private void hideAllPopups()
 	{
 		setOrientationPopupState(false);
 		setSlotPopupState(false);
+		setScriptNamePopupState(false);
 		activePopups.Clear();
 		getTilemap().GetComponent<PaintableGrid>().selectedObject = null;
 	}

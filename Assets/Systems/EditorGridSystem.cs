@@ -59,22 +59,23 @@ public class EditorGridSystem : FSystem {
 
 		var posTuple = new Tuple<int, int>(pos.x, pos.y);
 		
-		if (getActiveBrush() == Cell.Select)
-		{
-			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-			if (Input.GetMouseButtonDown(0) && getTilemap().GetComponent<PaintableGrid>().floorObjects.ContainsKey(posTuple)
-			    && getTilemap().GetComponent<PaintableGrid>().selectedObject == null)
-			{
-				getTilemap().GetComponent<PaintableGrid>().selectedObject =
-					getTilemap().GetComponent<PaintableGrid>().floorObjects[posTuple];
-			}
-			return;
-		}
-		
 		if (Input.GetMouseButtonDown(1) &&
 		    getTilemap().GetComponent<PaintableGrid>().floorObjects.ContainsKey(posTuple))
 		{
 			resetTile(pos.x, pos.y, -1);
+			getTilemap().GetComponent<PaintableGrid>().selectedObject = null;
+			return;
+		}
+		
+		if (getActiveBrush() == Cell.Select)
+		{
+			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+			if (Input.GetMouseButtonDown(0) && getTilemap().GetComponent<PaintableGrid>().floorObjects.ContainsKey(posTuple)
+			    && getTilemap().GetComponent<PaintableGrid>().selectedObject == null && getTilemap().GetComponent<PaintableGrid>().floorObjects[posTuple].selectable)
+			{
+				getTilemap().GetComponent<PaintableGrid>().selectedObject =
+					getTilemap().GetComponent<PaintableGrid>().floorObjects[posTuple];
+			}
 			return;
 		}
 
@@ -136,12 +137,12 @@ public class EditorGridSystem : FSystem {
 			tilemapGo.GetComponent<PaintableGrid>().floorObjects[new Tuple<int, int>(x, y)] = 
 				cell switch
 				{
-					Cell.Player => new FloorObject(Cell.Player, ObjectDirection.Up, x, y),
+					Cell.Player => new PlayerRobot("Bob", ObjectDirection.Up, x, y),
 					Cell.Enemy => new FloorObject(Cell.Enemy, ObjectDirection.Up, x, y),
 					Cell.Decoration => new DecorationObject(defaultDecoration, ObjectDirection.Up, x, y),
 					Cell.Door => new Door(ObjectDirection.Up, x, y, 0),
 					Cell.Console => new Console(ObjectDirection.Up, x, y, 0, true),
-					Cell.Coin => new FloorObject(Cell.Coin, ObjectDirection.Up, x, y),
+					Cell.Coin => new FloorObject(Cell.Coin, ObjectDirection.Up, x, y, orientable:false, selectable: false),
 					_ => null
 				};
 		}
@@ -238,16 +239,18 @@ public class FloorObject
 	public Cell type;
 	public ObjectDirection orientation;
 	public bool orientable;
+	public bool selectable;
 	public int x;
 	public int y;
 
-	public FloorObject(Cell type, ObjectDirection orientation, int x, int y, bool orientable = true)
+	public FloorObject(Cell type, ObjectDirection orientation, int x, int y, bool orientable = true, bool selectable = true)
 	{
 		this.type = type;
 		this.orientation = orientation;
 		this.x = x;
 		this.y = y;
 		this.orientable = orientable;
+		this.selectable = selectable;
 	}
 }
 
@@ -280,5 +283,15 @@ public class Door : FloorObject
 	public Door(ObjectDirection orientation, int x, int y, int slot) : base(Cell.Door, orientation, x, y)
 	{
 		this.slot = slot;
+	}
+}
+
+public class PlayerRobot : FloorObject
+{
+	public string associatedScriptName;
+
+	public PlayerRobot(string associatedScriptName, ObjectDirection orientation, int x, int y, bool orientable = true) : base(Cell.Player, orientation, x, y, orientable)
+	{
+		this.associatedScriptName = associatedScriptName;
 	}
 }
