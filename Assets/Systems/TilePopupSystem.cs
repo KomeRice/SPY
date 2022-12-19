@@ -72,7 +72,7 @@ public class TilePopupSystem : FSystem {
 					setSlotPopupState(true);
 					break;
 				case Console c:
-					setSlotPopupState(true);
+					setSlotPopupState(true, true);
 					break;
 				case PlayerRobot pr:
 					setScriptNamePopupState(true);
@@ -110,12 +110,14 @@ public class TilePopupSystem : FSystem {
 		orientationPopup.SetActive(enabled);
 	}
 
-	private void setSlotPopupState(bool enabled)
+	private void setSlotPopupState(bool enabled, bool showToggle = false)
 	{
 		if (enabled)
 		{
 			activePopups.Add(slotPopup);
 			slotPopup.GetComponentInChildren<InputField>().text = getSelectedSlot().ToString();
+			slotPopup.GetComponentInChildren<Toggle>().interactable = showToggle;
+			slotPopup.GetComponentInChildren<Toggle>().isOn = !showToggle || ((Console)getSelected()).state;
 		}
 		else if(getSelected() != null)
 		{
@@ -126,6 +128,7 @@ public class TilePopupSystem : FSystem {
 					break;
 				case Console c:
 					c.slot = Convert.ToInt32(slotPopup.GetComponentInChildren<InputField>().text);
+					c.state = slotPopup.GetComponentInChildren<Toggle>().isOn;
 					break;
 			}
 			slotPopup.GetComponentInChildren<InputField>().text = "";
