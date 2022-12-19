@@ -6,12 +6,14 @@ public class TilePopupSystem_wrapper : BaseWrapper
 	public UnityEngine.GameObject orientationPopup;
 	public UnityEngine.GameObject slotPopup;
 	public UnityEngine.GameObject scriptNamePopup;
+	public UnityEngine.GameObject furniturePopup;
 	private void Start()
 	{
 		this.hideFlags = HideFlags.NotEditable;
 		MainLoop.initAppropriateSystemField (system, "orientationPopup", orientationPopup);
 		MainLoop.initAppropriateSystemField (system, "slotPopup", slotPopup);
 		MainLoop.initAppropriateSystemField (system, "scriptNamePopup", scriptNamePopup);
+		MainLoop.initAppropriateSystemField (system, "furniturePopup", furniturePopup);
 	}
 
 	public void rotateSelectionUp()

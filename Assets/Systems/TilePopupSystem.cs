@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using FYFY;
-using TMPro;
+using Newtonsoft.Json.Utilities;
+using UnityEditor;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
@@ -14,9 +16,11 @@ public class TilePopupSystem : FSystem {
 	public GameObject orientationPopup;
 	public GameObject slotPopup;
 	public GameObject scriptNamePopup;
+	public GameObject furniturePopup;
 	
     private Vector2Int _gridsize;
     private List<GameObject> activePopups = new List<GameObject>();
+    private Dictionary<string, string> furnitureNameToPath = new Dictionary<string, string>();
 
     public TilePopupSystem()
 	{
@@ -29,6 +33,7 @@ public class TilePopupSystem : FSystem {
 		hideAllPopups();
 		_gridsize = new Vector2Int(getTilemap().GetComponent<PaintableGrid>().grid.GetLength(0),
 			getTilemap().GetComponent<PaintableGrid>().grid.GetLength(1));
+		initFurniturePopup();
 	}
 
 	// Use to update member variables when system pause. 
@@ -81,6 +86,7 @@ public class TilePopupSystem : FSystem {
 					setScriptNamePopupState(true);
 					break;
 				case DecorationObject deco:
+					setFurniturePopupState(true);
 					break;
 			}
 
@@ -90,20 +96,18 @@ public class TilePopupSystem : FSystem {
 			}
 		}
 	}
-	
-	// Might not be necessary
-	/*
-	private void setOrientationPopupState(bool enabled)
-	{
-		orientationText.enabled = enabled;
-		orientationBgImage.enabled = enabled;
 
-		for (var i = 1; i < orientationPopup.transform.childCount; i++)
+	private void initFurniturePopup()
+	{
+		var prefabsGuid = AssetDatabase.FindAssets("t:prefab", new [] {"Assets/Resources/Prefabs/Modern Furniture/Prefabs"});
+		var prefabPaths = prefabsGuid.Select(AssetDatabase.GUIDToAssetPath).Select(s => s.Replace("Assets/Resources/Prefabs/", "").Replace(".prefab", ""));
+		foreach (var path in prefabPaths)
 		{
-			orientationPopup.transform.GetChild(i).gameObject.SetActive(enabled);
+			var name = path.Split('/').Last();
+			furnitureNameToPath[name] = path;
 		}
+		furniturePopup.GetComponentInChildren<Dropdown>().AddOptions(furnitureNameToPath.Keys.ToList());
 	}
-	*/
 
 	// Can be factorised
 	private void setOrientationPopupState(bool enabled)
@@ -167,11 +171,30 @@ public class TilePopupSystem : FSystem {
 		scriptNamePopup.SetActive(enabled);
 	}
 
+	private void setFurniturePopupState(bool enabled)
+	{
+		if (enabled)
+		{
+			activePopups.Add(furniturePopup);
+			furniturePopup.GetComponentInChildren<Dropdown>().value = furnitureNameToPath.Keys.IndexOf(s => furnitureNameToPath[s] == ((DecorationObject)getSelected()).path);
+		}
+		else if (getSelected() != null)
+		{
+			var value = furniturePopup.GetComponentInChildren<Dropdown>()
+				.options[furniturePopup.GetComponentInChildren<Dropdown>().value].text;
+
+			((DecorationObject)getSelected()).path = furnitureNameToPath[value];
+		}
+		
+		furniturePopup.SetActive(enabled);
+	}
+	
 	private void hideAllPopups()
 	{
 		setOrientationPopupState(false);
 		setSlotPopupState(false);
 		setScriptNamePopupState(false);
+		setFurniturePopupState(false);
 		activePopups.Clear();
 		getTilemap().GetComponent<PaintableGrid>().selectedObject = null;
 	}

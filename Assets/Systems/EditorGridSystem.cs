@@ -292,11 +292,11 @@ public class FloorObject
 
 public class DecorationObject : FloorObject
 {
-	public string name;
+	public string path;
 
-	public DecorationObject(string name, ObjectDirection orientation, int x, int y) : base(Cell.Decoration, orientation, x, y)
+	public DecorationObject(string path, ObjectDirection orientation, int x, int y) : base(Cell.Decoration, orientation, x, y)
 	{
-		this.name = name;
+		this.path = path;
 	}
 }
 
