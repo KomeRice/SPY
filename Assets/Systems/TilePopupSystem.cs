@@ -128,13 +128,15 @@ public class TilePopupSystem : FSystem {
 		}
 		else if(getSelected() != null)
 		{
+			var text = slotPopup.GetComponentInChildren<InputField>().text;
+			var slotId = text.Length > 0 ? int.Parse(text) : 0;
 			switch (getSelected())
 			{
 				case Door d:
-					d.slot = Convert.ToInt32(slotPopup.GetComponentInChildren<InputField>().text);
+					d.slot = slotId;
 					break;
 				case Console c:
-					c.slot = Convert.ToInt32(slotPopup.GetComponentInChildren<InputField>().text);
+					c.slot = slotId;
 					c.state = slotPopup.GetComponentInChildren<Toggle>().isOn;
 					break;
 			}
@@ -178,7 +180,7 @@ public class TilePopupSystem : FSystem {
 			activePopups.Add(furniturePopup);
 			furniturePopup.GetComponentInChildren<Dropdown>().value = furnitureNameToPath.Keys.IndexOf(s => furnitureNameToPath[s] == ((DecorationObject)getSelected()).path);
 		}
-		else if (getSelected() != null)
+		else if (getSelected() != null && getSelected() is DecorationObject)
 		{
 			var value = furniturePopup.GetComponentInChildren<Dropdown>()
 				.options[furniturePopup.GetComponentInChildren<Dropdown>().value].text;
