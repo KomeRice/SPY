@@ -138,7 +138,7 @@ public class EditorGridSystem : FSystem {
 				cell switch
 				{
 					Cell.Player => new PlayerRobot("Bob", ObjectDirection.Up, x, y),
-					Cell.Enemy => new FloorObject(Cell.Enemy, ObjectDirection.Up, x, y),
+					Cell.Enemy => new EnemyRobot("Eve", ObjectDirection.Up, x, y),
 					Cell.Decoration => new DecorationObject(defaultDecoration, ObjectDirection.Up, x, y),
 					Cell.Door => new Door(ObjectDirection.Up, x, y, 0),
 					Cell.Console => new Console(ObjectDirection.Up, x, y, 0, true),
@@ -255,6 +255,21 @@ public enum EnemyTypeRange
 	AroundView = 2
 }
 
+public enum scriptType
+{
+	Optimal = 0,
+	NonOptimal = 1,
+	Bugged = 2,
+	Undefined = 3
+}
+
+public enum scriptEditMode
+{
+	Locked = 0,
+	Sync = 1,
+	Editable = 2
+}
+
 public class FloorObject
 {
 	public Cell type;
@@ -312,6 +327,18 @@ public class PlayerRobot : FloorObject
 	public string associatedScriptName;
 
 	public PlayerRobot(string associatedScriptName, ObjectDirection orientation, int x, int y, bool orientable = true) : base(Cell.Player, orientation, x, y, orientable)
+	{
+		this.associatedScriptName = associatedScriptName;
+	}
+}
+
+public class EnemyRobot : FloorObject
+{
+	public string associatedScriptName;
+
+	public EnemyRobot(string associatedScriptName, ObjectDirection orientation, int x, int y,
+		bool selfRange = false, EnemyTypeRange typeRange = EnemyTypeRange.LineView, bool orientable = true, bool selectable = true)
+		: base(Cell.Enemy, orientation, x, y, orientable, selectable)
 	{
 		this.associatedScriptName = associatedScriptName;
 	}

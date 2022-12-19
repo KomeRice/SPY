@@ -77,6 +77,9 @@ public class TilePopupSystem : FSystem {
 				case PlayerRobot pr:
 					setScriptNamePopupState(true);
 					break;
+				case EnemyRobot er:
+					setScriptNamePopupState(true);
+					break;
 				case DecorationObject deco:
 					break;
 			}
@@ -141,12 +144,12 @@ public class TilePopupSystem : FSystem {
 		if (enabled)
 		{
 			activePopups.Add(scriptNamePopup);
-			switch (getSelected())
+			scriptNamePopup.GetComponentInChildren<InputField>().text = getSelected() switch
 			{
-				case PlayerRobot pr:
-					scriptNamePopup.GetComponentInChildren<InputField>().text = pr.associatedScriptName;
-					break;
-			}
+				PlayerRobot pr => pr.associatedScriptName,
+				EnemyRobot er => er.associatedScriptName,
+				_ => scriptNamePopup.GetComponentInChildren<InputField>().text
+			};
 		}
 		else if(getSelected() != null)
 		{
@@ -154,6 +157,9 @@ public class TilePopupSystem : FSystem {
 			{
 				case PlayerRobot pr:
 					pr.associatedScriptName = scriptNamePopup.GetComponentInChildren<InputField>().text;
+					break;
+				case EnemyRobot er:
+					er.associatedScriptName = scriptNamePopup.GetComponentInChildren<InputField>().text;
 					break;
 			}
 			scriptNamePopup.GetComponentInChildren<InputField>().text = "";
