@@ -145,13 +145,13 @@ public class EditorGridSystem : FSystem {
 					Cell.Coin => new FloorObject(Cell.Coin, ObjectDirection.Up, x, y, orientable:false, selectable: false),
 					_ => null
 				};
+			rotateObject(ObjectDirection.Up, x, y);
 		}
 		
 		tilemapGo.GetComponent<Tilemap>().SetTile(new Vector3Int(x - _gridSize.x / 2,
 			_gridSize.y / 2 - y, 
 			(int) cell < 10000 ? 0 : -1), 
 			cellToTile(cell));
-		Debug.Log($"Set tile: {x}, {y} to tile");
 	}
 
 	public void resetTile(int x, int y, int z)
@@ -164,7 +164,28 @@ public class EditorGridSystem : FSystem {
 			null);
 		
 	}
+	
+	private void rotateObject(ObjectDirection newOrientation, int x, int y)
+	{
+		var newpos = new Vector3Int(x - _gridSize.x / 2,
+			_gridSize.y / 2 - y, -1);
+		var quat = Quaternion.Euler(0, 0, orientationToInt(newOrientation));
+		
+		getTilemap().GetComponent<Tilemap>().SetTransformMatrix(newpos, Matrix4x4.Rotate(quat));
+	}
 
+	private int orientationToInt(ObjectDirection orientation)
+	{
+		return orientation switch
+		{
+			ObjectDirection.Up => 0,
+			ObjectDirection.Right => 270,
+			ObjectDirection.Down => 180,
+			ObjectDirection.Left => 90,
+			_ => throw new ArgumentOutOfRangeException(nameof(orientation), orientation,"Impossible orientation")
+		};
+	}
+	
 	private Tile cellToTile(Cell cell)
 	{
 		return cell switch
