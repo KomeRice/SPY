@@ -8,4 +8,5 @@ public class PaintableGrid : MonoBehaviour {
 	public Cell activeBrush;
 	public Dictionary<Tuple<int, int>, FloorObject> floorObjects;
 	public FloorObject selectedObject;
+	public bool gridActive;
 }

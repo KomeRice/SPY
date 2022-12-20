@@ -39,6 +39,7 @@ public class ViewToggleSystem : FSystem
 	{
 		mainCanvasActive = !mainCanvasActive;
 		mainCanvas.gameObject.SetActive(mainCanvasActive);
+		f_paintables.First().GetComponent<PaintableGrid>().gridActive = mainCanvasActive;
 		f_paintables.First().SetActive(mainCanvasActive);
 		metadataCanvas.gameObject.SetActive(!mainCanvasActive);
 	}

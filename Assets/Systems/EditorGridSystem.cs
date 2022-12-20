@@ -34,6 +34,7 @@ public class EditorGridSystem : FSystem {
 	{
 		var tilemapGo = getTilemap();
 		getTilemap().GetComponent<PaintableGrid>().floorObjects = new Dictionary<Tuple<int, int>, FloorObject>();
+		getTilemap().GetComponent<PaintableGrid>().gridActive = true;
 		initGrid();
 	}
 
@@ -51,7 +52,8 @@ public class EditorGridSystem : FSystem {
 	protected override void onProcess(int familiesUpdateCount)
 	{
 		var pos = mousePosToGridPos();
-		if (0 > pos.x || pos.x >= _gridSize.x || 0 > pos.y || pos.y >= _gridSize.y || !canBePlaced(getActiveBrush(), pos.x, pos.y))
+		if (0 > pos.x || pos.x >= _gridSize.x || 0 > pos.y || pos.y >= _gridSize.y || !canBePlaced(getActiveBrush(), pos.x, pos.y)
+		    || !getTilemap().GetComponent<PaintableGrid>().gridActive)
 		{
 			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 			return;
