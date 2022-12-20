@@ -5,7 +5,6 @@ using FYFY;
 using UnityEngine.Tilemaps;
 
 public class EditorGridSystem : FSystem {
-
 	public static EditorGridSystem instance;
 	public Tile voidTile;
 	public Tile floorTile;
@@ -20,7 +19,6 @@ public class EditorGridSystem : FSystem {
 	public Tile coinTile;
 	public Texture2D placingCursor;
 	public string defaultDecoration;
-	
 	private Vector2Int _gridSize;
 	private Family f_paintables = FamilyManager.getFamily(new AllOfComponents(typeof(PaintableGrid)));
 
@@ -105,7 +103,6 @@ public class EditorGridSystem : FSystem {
 					setTile(i, j, Cell.Spawn);
 					continue;
 				}
-
 				setTile(i, j, Cell.Void);
 			}
 		}
@@ -126,6 +123,7 @@ public class EditorGridSystem : FSystem {
 	public void setTile(int x, int y, Cell cell)
 	{
 		var tilemapGo = getTilemap();
+		var tuplePos = new Tuple<int, int>(x, y);
 		if ((int)cell < 10000)
 		{
 			tilemapGo.GetComponent<PaintableGrid>().grid[x, y] = cell;
@@ -134,9 +132,10 @@ public class EditorGridSystem : FSystem {
 				resetTile(x, y, -1);
 			}
 		}
-		else
+		else if(!tilemapGo.GetComponent<PaintableGrid>().floorObjects.ContainsKey(tuplePos) ||
+			tilemapGo.GetComponent<PaintableGrid>().floorObjects[tuplePos].type != cell)
 		{
-			tilemapGo.GetComponent<PaintableGrid>().floorObjects[new Tuple<int, int>(x, y)] = 
+			tilemapGo.GetComponent<PaintableGrid>().floorObjects[tuplePos] = 
 				cell switch
 				{
 					Cell.Player => new PlayerRobot("Bob", ObjectDirection.Up, x, y),
@@ -149,6 +148,10 @@ public class EditorGridSystem : FSystem {
 				};
 			rotateObject(ObjectDirection.Up, x, y);
 		}
+		else
+		{
+			return;
+		}
 		
 		tilemapGo.GetComponent<Tilemap>().SetTile(new Vector3Int(x - _gridSize.x / 2,
 			_gridSize.y / 2 - y, 
@@ -159,12 +162,12 @@ public class EditorGridSystem : FSystem {
 	public void resetTile(int x, int y, int z)
 	{
 		var tilemapGo = getTilemap();
-		tilemapGo.GetComponent<PaintableGrid>().floorObjects.Remove(new Tuple<int, int>(x, y));
+		var tuplePos = new Tuple<int, int>(x, y);
+		tilemapGo.GetComponent<PaintableGrid>().floorObjects.Remove(tuplePos);
 		tilemapGo.GetComponent<Tilemap>().SetTile(new Vector3Int(x - _gridSize.x / 2,
 			_gridSize.y / 2 - y, 
 			z), 
 			null);
-		
 	}
 	
 	private void rotateObject(ObjectDirection newOrientation, int x, int y)
@@ -324,24 +327,39 @@ public class Door : FloorObject
 	}
 }
 
-public class PlayerRobot : FloorObject
+public class Robot : FloorObject
 {
 	public string associatedScriptName;
 
-	public PlayerRobot(string associatedScriptName, ObjectDirection orientation, int x, int y, bool orientable = true) : base(Cell.Player, orientation, x, y, orientable)
+	protected Robot(Cell cellType, string associatedScriptName, ObjectDirection orientation, int x, int y, bool orientable = true) : base(cellType, orientation, x, y, orientable)
 	{
 		this.associatedScriptName = associatedScriptName;
 	}
+
+	public void editName(string newName)
+	{
+		associatedScriptName = newName;
+	}
 }
 
-public class EnemyRobot : FloorObject
+public class PlayerRobot : Robot
 {
-	public string associatedScriptName;
-
-	public EnemyRobot(string associatedScriptName, ObjectDirection orientation, int x, int y,
-		bool selfRange = false, EnemyTypeRange typeRange = EnemyTypeRange.LineView, bool orientable = true, bool selectable = true)
-		: base(Cell.Enemy, orientation, x, y, orientable, selectable)
+	public PlayerRobot(string associatedScriptName, ObjectDirection orientation, int x, int y) : 
+		base(Cell.Player, associatedScriptName, orientation, x, y)
 	{
-		this.associatedScriptName = associatedScriptName;
+	}
+}
+
+public class EnemyRobot : Robot
+{
+	public EnemyTypeRange typeRange;
+	public bool selfRange;
+
+	public EnemyRobot(string associatedScriptName, ObjectDirection orientation, int x, int y, 
+		bool selfRange = false, EnemyTypeRange typeRange = EnemyTypeRange.LineView, bool orientable = true, bool selectable = true)
+		: base(Cell.Enemy, associatedScriptName,orientation, x, y)
+	{
+		this.typeRange = typeRange;
+		this.selfRange = selfRange;
 	}
 }

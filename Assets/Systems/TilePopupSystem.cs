@@ -17,6 +17,7 @@ public class TilePopupSystem : FSystem {
 	public GameObject slotPopup;
 	public GameObject scriptNamePopup;
 	public GameObject furniturePopup;
+	public GameObject scriptMenu;
 	
     private Vector2Int _gridsize;
     private List<GameObject> activePopups = new List<GameObject>();
@@ -60,12 +61,11 @@ public class TilePopupSystem : FSystem {
 		{
 			if (Input.GetMouseButtonDown(0))
 			{
-				foreach (var go in activePopups)
+				if (activePopups.Any(go => go.GetComponent<PopupMouseSensitive>().isOver))
 				{
-					if (go.GetComponent<PopupMouseSensitive>().isOver)
-						return;
+					return;
 				}
-				
+
 				hideAllPopups();
 			}
 		}
@@ -150,6 +150,7 @@ public class TilePopupSystem : FSystem {
 		if (enabled)
 		{
 			activePopups.Add(scriptNamePopup);
+			activePopups.Add(scriptMenu);
 			scriptNamePopup.GetComponentInChildren<InputField>().text = getSelected() switch
 			{
 				PlayerRobot pr => pr.associatedScriptName,
@@ -162,15 +163,16 @@ public class TilePopupSystem : FSystem {
 			switch (getSelected())
 			{
 				case PlayerRobot pr:
-					pr.associatedScriptName = scriptNamePopup.GetComponentInChildren<InputField>().text;
+					pr.editName(scriptNamePopup.GetComponentInChildren<InputField>().text);
 					break;
 				case EnemyRobot er:
-					er.associatedScriptName = scriptNamePopup.GetComponentInChildren<InputField>().text;
+					er.editName(scriptNamePopup.GetComponentInChildren<InputField>().text);
 					break;
 			}
 			scriptNamePopup.GetComponentInChildren<InputField>().text = "";
 		}
 		scriptNamePopup.SetActive(enabled);
+		scriptMenu.SetActive(enabled);
 	}
 
 	private void setFurniturePopupState(bool enabled)
@@ -178,7 +180,8 @@ public class TilePopupSystem : FSystem {
 		if (enabled)
 		{
 			activePopups.Add(furniturePopup);
-			furniturePopup.GetComponentInChildren<Dropdown>().value = furnitureNameToPath.Keys.IndexOf(s => furnitureNameToPath[s] == ((DecorationObject)getSelected()).path);
+			furniturePopup.GetComponentInChildren<Dropdown>().value = furnitureNameToPath.Keys.
+				IndexOf(s => furnitureNameToPath[s] == ((DecorationObject)getSelected()).path);
 		}
 		else if (getSelected() != null && getSelected() is DecorationObject)
 		{
