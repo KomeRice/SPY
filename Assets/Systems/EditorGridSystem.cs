@@ -354,12 +354,14 @@ public class EnemyRobot : Robot
 {
 	public EnemyTypeRange typeRange;
 	public bool selfRange;
+	public int range;
 
 	public EnemyRobot(string associatedScriptName, ObjectDirection orientation, int x, int y, 
-		bool selfRange = false, EnemyTypeRange typeRange = EnemyTypeRange.LineView, bool orientable = true, bool selectable = true)
+		bool selfRange = false, EnemyTypeRange typeRange = EnemyTypeRange.LineView, bool orientable = true, bool selectable = true, int range = 3)
 		: base(Cell.Enemy, associatedScriptName,orientation, x, y)
 	{
 		this.typeRange = typeRange;
 		this.selfRange = selfRange;
+		this.range = range;
 	}
 }

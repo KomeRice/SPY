@@ -18,6 +18,7 @@ public class TilePopupSystem : FSystem {
 	public GameObject scriptNamePopup;
 	public GameObject furniturePopup;
 	public GameObject scriptMenu;
+	public GameObject rangePopup;
 	
     private Vector2Int _gridsize;
     private List<GameObject> activePopups = new List<GameObject>();
@@ -84,6 +85,7 @@ public class TilePopupSystem : FSystem {
 					break;
 				case EnemyRobot er:
 					setScriptNamePopupState(true);
+					setRangePopupState(true);
 					break;
 				case DecorationObject deco:
 					setFurniturePopupState(true);
@@ -193,6 +195,25 @@ public class TilePopupSystem : FSystem {
 		
 		furniturePopup.SetActive(enabled);
 	}
+
+	private void setRangePopupState(bool enabled)
+	{
+		if (enabled)
+		{
+			activePopups.Add(rangePopup);
+			rangePopup.GetComponentInChildren<Dropdown>().value = (int)((EnemyRobot) getSelected()).typeRange;
+			rangePopup.GetComponentInChildren<InputField>().text = ((EnemyRobot)getSelected()).range.ToString();
+		}
+		else if (getSelected() != null && getSelected() is EnemyRobot)
+		{
+			var rangeText = rangePopup.GetComponentInChildren<InputField>().text;
+			var value = rangePopup.GetComponentInChildren<Dropdown>().value;
+			((EnemyRobot)getSelected()).typeRange = (EnemyTypeRange) value;
+			((EnemyRobot)getSelected()).range = string.IsNullOrEmpty(rangeText) ? 3 : int.Parse(rangeText);
+		}
+		
+		rangePopup.SetActive(enabled);
+	}
 	
 	private void hideAllPopups()
 	{
@@ -200,6 +221,7 @@ public class TilePopupSystem : FSystem {
 		setSlotPopupState(false);
 		setScriptNamePopupState(false);
 		setFurniturePopupState(false);
+		setRangePopupState(false);
 		activePopups.Clear();
 		getTilemap().GetComponent<PaintableGrid>().selectedObject = null;
 	}
