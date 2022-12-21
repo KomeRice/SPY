@@ -64,4 +64,24 @@ public class EditorLevelDataSystem_wrapper : BaseWrapper
 		MainLoop.callAppropriateSystemMethod (system, "scoreToggleChanged", null);
 	}
 
+	public void scoreTwoStarsExit()
+	{
+		MainLoop.callAppropriateSystemMethod (system, "scoreTwoStarsExit", null);
+	}
+
+	public void scoreThreeStarsExit()
+	{
+		MainLoop.callAppropriateSystemMethod (system, "scoreThreeStarsExit", null);
+	}
+
+	public void fogToggleChanged()
+	{
+		MainLoop.callAppropriateSystemMethod (system, "fogToggleChanged", null);
+	}
+
+	public void dragDropChanged()
+	{
+		MainLoop.callAppropriateSystemMethod (system, "dragDropChanged", null);
+	}
+
 }

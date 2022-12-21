@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using UnityEngine;
 using FYFY;
 using UnityEngine.UI;
@@ -19,6 +18,8 @@ public class EditorLevelDataSystem : FSystem {
 	public Color sensorColor;
 
 	public Family f_editorblocks = FamilyManager.getFamily(new AllOfComponents(typeof(EditorBlockData)));
+	public Family f_levelData = FamilyManager.getFamily(new AllOfComponents(typeof(LevelData)));
+	
 	public GameObject scrollViewContent;
 	public GameObject executionLimitContainer;
 	public Toggle fogToggle;
@@ -61,6 +62,13 @@ public class EditorLevelDataSystem : FSystem {
 			
 			spriteImage.sprite = blockData.blockIcon;
 			editorBlock.transform.GetChild(5).GetComponent<Text>().text = blockData.blockName;
+
+			getData().dragdropDisabled = false;
+			getData().fogEnabled = false;
+			getData().executionLimitEnabled = false;
+			getData().scoreEnabled = false;
+			getData().scoreThreeStars = 1;
+			getData().scoreTwoStars = 0;
 		}
 	}
 
@@ -108,8 +116,9 @@ public class EditorLevelDataSystem : FSystem {
 
 	public void executionLimitChanged()
 	{
-		executionLimitContainer.GetComponentInChildren<InputField>().interactable =
-			executionLimitContainer.GetComponentInChildren<Toggle>().isOn;
+		var newStatus = executionLimitContainer.GetComponentInChildren<Toggle>().isOn;
+		executionLimitContainer.GetComponentInChildren<InputField>().interactable = newStatus;
+		getData().executionLimitEnabled = newStatus;
 	}
 	
 	public void scoreToggleChanged()
@@ -117,6 +126,70 @@ public class EditorLevelDataSystem : FSystem {
 		var newStatus = scoreContainer.GetComponentInChildren<Toggle>().isOn;
 		scoreContainer.transform.GetChild(1).GetComponent<InputField>().interactable = newStatus;
 		scoreContainer.transform.GetChild(2).GetComponent<InputField>().interactable = newStatus;
+		getData().scoreEnabled = newStatus;
+	}
+
+	public void scoreTwoStarsExit()
+	{
+		var twoStarsText = scoreContainer.transform.GetChild(1).GetComponent<InputField>().text;
+
+		if (string.IsNullOrEmpty(twoStarsText))
+		{
+			scoreContainer.transform.GetChild(1).GetComponent<InputField>().text = "0";
+			getData().scoreTwoStars = 0;
+			return;
+		}
+
+		var twoStarsScore = int.Parse(twoStarsText);
+		var threeStarsScore = getData().scoreThreeStars;
+		if (twoStarsScore < threeStarsScore)
+		{
+			getData().scoreTwoStars = twoStarsScore;
+			return;
+		}
+
+		scoreContainer.transform.GetChild(1).GetComponent<InputField>().text = (threeStarsScore - 1).ToString();
+		getData().scoreTwoStars = threeStarsScore - 1;
+	}
+
+	public void scoreThreeStarsExit()
+	{
+		var threeStarsText = scoreContainer.transform.GetChild(2).GetComponent<InputField>().text;
+		var twoStarsScore = getData().scoreTwoStars;
+
+		if (string.IsNullOrEmpty(threeStarsText))
+		{
+			scoreContainer.transform.GetChild(2).GetComponent<InputField>().text = (twoStarsScore + 1).ToString();
+			getData().scoreThreeStars = twoStarsScore + 1;
+			return;
+		}
+
+		var threeStarsScore = int.Parse(threeStarsText);
+		if (twoStarsScore < threeStarsScore)
+		{
+			getData().scoreThreeStars = threeStarsScore;
+			return;
+		}
+
+		scoreContainer.transform.GetChild(2).GetComponent<InputField>().text = (twoStarsScore + 1).ToString();
+		getData().scoreThreeStars = twoStarsScore + 1;
+	}	
+	
+	public void fogToggleChanged()
+	{
+		var newStatus = fogToggle.GetComponent<Toggle>().isOn;
+		getData().fogEnabled = newStatus;
+	}
+	
+	public void dragDropChanged()
+	{
+		var newStatus = dragAndDropToggle.GetComponent<Toggle>().isOn;
+		getData().dragdropDisabled = !newStatus;
+	}
+
+	private LevelData getData()
+	{
+		return f_levelData.First().GetComponent<LevelData>();
 	}
 }
 

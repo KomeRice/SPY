@@ -162,16 +162,20 @@ public class TilePopupSystem : FSystem {
 		}
 		else if(getSelected() != null)
 		{
-			switch (getSelected())
+			if (!string.IsNullOrEmpty(scriptNamePopup.GetComponentInChildren<InputField>().text) &&
+			    !string.IsNullOrWhiteSpace(scriptNamePopup.GetComponentInChildren<InputField>().text))
 			{
-				case PlayerRobot pr:
-					pr.editName(scriptNamePopup.GetComponentInChildren<InputField>().text);
-					break;
-				case EnemyRobot er:
-					er.editName(scriptNamePopup.GetComponentInChildren<InputField>().text);
-					break;
+				switch (getSelected())
+				{
+					case PlayerRobot pr:
+						pr.editName(scriptNamePopup.GetComponentInChildren<InputField>().text);
+						break;
+					case EnemyRobot er:
+						er.editName(scriptNamePopup.GetComponentInChildren<InputField>().text);
+						break;
+				}
+				scriptNamePopup.GetComponentInChildren<InputField>().text = "";
 			}
-			scriptNamePopup.GetComponentInChildren<InputField>().text = "";
 		}
 		scriptNamePopup.SetActive(enabled);
 		scriptMenu.SetActive(enabled);
