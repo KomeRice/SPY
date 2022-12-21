@@ -203,6 +203,7 @@ public class TilePopupSystem : FSystem {
 			activePopups.Add(rangePopup);
 			rangePopup.GetComponentInChildren<Dropdown>().value = (int)((EnemyRobot) getSelected()).typeRange;
 			rangePopup.GetComponentInChildren<InputField>().text = ((EnemyRobot)getSelected()).range.ToString();
+			rangePopup.GetComponentInChildren<Toggle>().isOn = ((EnemyRobot)getSelected()).selfRange;
 		}
 		else if (getSelected() != null && getSelected() is EnemyRobot)
 		{
@@ -210,6 +211,7 @@ public class TilePopupSystem : FSystem {
 			var value = rangePopup.GetComponentInChildren<Dropdown>().value;
 			((EnemyRobot)getSelected()).typeRange = (EnemyTypeRange) value;
 			((EnemyRobot)getSelected()).range = string.IsNullOrEmpty(rangeText) ? 3 : int.Parse(rangeText);
+			((EnemyRobot)getSelected()).selfRange = rangePopup.GetComponentInChildren<Toggle>().isOn;
 		}
 		
 		rangePopup.SetActive(enabled);
