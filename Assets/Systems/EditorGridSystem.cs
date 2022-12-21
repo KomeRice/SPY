@@ -260,7 +260,7 @@ public enum EnemyTypeRange
 	AroundView = 2
 }
 
-public enum scriptType
+public enum ScriptType
 {
 	Optimal = 0,
 	NonOptimal = 1,
@@ -268,7 +268,7 @@ public enum scriptType
 	Undefined = 3
 }
 
-public enum scriptEditMode
+public enum ScriptEditMode
 {
 	Locked = 0,
 	Sync = 1,
@@ -330,10 +330,14 @@ public class Door : FloorObject
 public class Robot : FloorObject
 {
 	public string associatedScriptName;
+	public ScriptType scriptType;
+	public ScriptEditMode scriptEditMode;
 
 	protected Robot(Cell cellType, string associatedScriptName, ObjectDirection orientation, int x, int y, bool orientable = true) : base(cellType, orientation, x, y, orientable)
 	{
 		this.associatedScriptName = associatedScriptName;
+		scriptType = ScriptType.Undefined;
+		scriptEditMode = ScriptEditMode.Locked;
 	}
 
 	public void editName(string newName)

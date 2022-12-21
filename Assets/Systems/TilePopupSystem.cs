@@ -19,8 +19,11 @@ public class TilePopupSystem : FSystem {
 	public GameObject furniturePopup;
 	public GameObject scriptMenu;
 	public GameObject rangePopup;
+
+	private const string FurniturePrefix = "Prefabs/Modern Furniture/Prefabs/";
+	private const string PathXmlPrefix = "Modern Furniture/Prefabs/";
 	
-    private Vector2Int _gridsize;
+	private Vector2Int _gridsize;
     private List<GameObject> activePopups = new List<GameObject>();
     private Dictionary<string, string> furnitureNameToPath = new Dictionary<string, string>();
 
@@ -101,12 +104,13 @@ public class TilePopupSystem : FSystem {
 
 	private void initFurniturePopup()
 	{
-		var prefabsGuid = AssetDatabase.FindAssets("t:prefab", new [] {"Assets/Resources/Prefabs/Modern Furniture/Prefabs"});
-		var prefabPaths = prefabsGuid.Select(AssetDatabase.GUIDToAssetPath).Select(s => s.Replace("Assets/Resources/Prefabs/", "").Replace(".prefab", ""));
-		foreach (var path in prefabPaths)
+		// Change the path provided here to load more options
+		var prefabs = Resources.LoadAll<GameObject>(FurniturePrefix).ToList();
+		var prefabNames = prefabs.GroupBy(p => p.name).Select(g => g.First().name).ToList();
+		
+		foreach (var name in prefabNames)
 		{
-			var name = path.Split('/').Last();
-			furnitureNameToPath[name] = path;
+			furnitureNameToPath[name] = PathXmlPrefix + name;
 		}
 		furniturePopup.GetComponentInChildren<Dropdown>().AddOptions(furnitureNameToPath.Keys.ToList());
 	}
@@ -159,6 +163,9 @@ public class TilePopupSystem : FSystem {
 				EnemyRobot er => er.associatedScriptName,
 				_ => scriptNamePopup.GetComponentInChildren<InputField>().text
 			};
+
+			scriptNamePopup.GetComponentsInChildren<Dropdown>()[0].value = (int)((Robot)getSelected()).scriptEditMode;
+			scriptNamePopup.GetComponentsInChildren<Dropdown>()[1].value = (int)((Robot)getSelected()).scriptType;
 		}
 		else if(getSelected() != null)
 		{
@@ -175,6 +182,12 @@ public class TilePopupSystem : FSystem {
 						break;
 				}
 				scriptNamePopup.GetComponentInChildren<InputField>().text = "";
+			}
+			if(getSelected() is Robot){
+				((Robot)getSelected()).scriptEditMode =
+					(ScriptEditMode)scriptNamePopup.GetComponentsInChildren<Dropdown>()[0].value;
+				((Robot)getSelected()).scriptType =
+					(ScriptType)scriptNamePopup.GetComponentsInChildren<Dropdown>()[1].value;
 			}
 		}
 		scriptNamePopup.SetActive(enabled);
