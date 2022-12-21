@@ -13696,8 +13696,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 43347357}
   m_HandleRect: {fileID: 43347356}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.9999971
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -21055,8 +21055,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1335666271}
   m_HandleRect: {fileID: 1335666270}
   m_Direction: 0
-  m_Value: -0.00000079941526
-  m_Size: 0.6287694
+  m_Value: -0.00000062376404
+  m_Size: 0.6035262
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -23836,7 +23836,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00044420455}
+  m_AnchoredPosition: {x: 0, y: -0.000061273575}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1576045516
@@ -31197,6 +31197,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   executionLimitField: {fileID: 400392324}
+  editableContainer: {fileID: 1576045514}
 --- !u!1 &2055185790
 GameObject:
   m_ObjectHideFlags: 0
@@ -32006,7 +32007,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58f1705a0097cd941af0553d38db276b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionPrefab: {fileID: 589826222410828797, guid: 0ddbe0637f2df4445bd007ae1a3c6d16,
+  actionPrefab: {fileID: 589826222410828797, guid: ee60914d1e53637489533fe325d7582c,
     type: 3}
 --- !u!114 &2108311463
 MonoBehaviour:
@@ -32723,7 +32724,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1904905644}
   m_HandleRect: {fileID: 1904905643}
   m_Direction: 0
-  m_Value: 0.00000033378603
+  m_Value: -0.00000023841855
   m_Size: 0
   m_NumberOfSteps: 0
   m_OnValueChanged:
