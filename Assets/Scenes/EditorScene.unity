@@ -15106,6 +15106,7 @@ GameObject:
   - component: {fileID: 895145085}
   - component: {fileID: 895145084}
   - component: {fileID: 895145083}
+  - component: {fileID: 895145086}
   m_Layer: 5
   m_Name: SaveButton
   m_TagString: Untagged
@@ -15226,6 +15227,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 895145081}
   m_CullTransparentMesh: 1
+--- !u!114 &895145086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895145081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a851999ad524fd640a3b2ec45d400d36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: 'Saves the map as an .xml file (Shortcut: Ctrl-S)'
 --- !u!1 &935219762
 GameObject:
   m_ObjectHideFlags: 0

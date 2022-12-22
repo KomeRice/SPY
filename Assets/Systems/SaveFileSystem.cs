@@ -39,6 +39,9 @@ public class SaveFileSystem : FSystem
 
 	// Use to process your families.
 	protected override void onProcess(int familiesUpdateCount) {
+		if((Input.GetKeyDown(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.S)) ||
+		   Input.GetKeyDown(KeyCode.LeftCommand) && Input.GetKeyDown(KeyCode.S))
+			saveXmlFile();
 	}
 
 	public void saveXmlFile()
