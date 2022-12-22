@@ -231,7 +231,6 @@ public class SaveFileSystem : FSystem
 			var ifElseComponent = child.GetComponent<IfElseControl>();
 			if (ifElseComponent)
 			{
-				
 				var conditionXml = new XElement("condition", getXmlCondition(child.transform.Find("ConditionContainer").GetChild(0).gameObject));
 				var thenContainer = child.transform.Find("Container");
 				var elseContainer = child.transform.Find("ElseContainer");
@@ -251,7 +250,6 @@ public class SaveFileSystem : FSystem
 				result.Add(new XElement("if", conditionXml, thenXml));
 				continue;
 			}
-			
 			
 			// WhileComponent inherits from ForControl so it must be checked before the latter
 			
@@ -282,7 +280,6 @@ public class SaveFileSystem : FSystem
 				result.Add(new XElement("forever", thenXml));
 			}
 		}
-
 		return result;
 	}
 
@@ -306,7 +303,6 @@ public class SaveFileSystem : FSystem
 			};
 			return new XElement("captor", new XAttribute("type", name));
 		}
-		
 
 		var operatorComponent = cur.GetComponent<BaseOperator>();
 		if (!operatorComponent)
