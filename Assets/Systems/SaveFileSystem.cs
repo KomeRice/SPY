@@ -59,6 +59,29 @@ public class SaveFileSystem : FSystem
 		}
 		rootNode.Add(mapNode);
 
+		var familyDialogs = 
+			FamilyManager.getFamily(new AllOfComponents(typeof(DialogListEntry)))
+				.Select(go => go.GetComponent<DialogListEntry>()).ToList();
+
+		if (familyDialogs.Count > 0)
+		{
+			var dialogNode = new XElement("dialogs");
+			foreach (var dialog in familyDialogs)
+			{
+				var dialogSubNode = new XElement("dialog", new XAttribute("text", dialog.dialogText));
+				if (dialog.cameraMove)
+				{
+					dialogSubNode.Add(new XAttribute("camX", dialog.cameraMoveX));
+					dialogSubNode.Add(new XAttribute("camY", dialog.cameraMoveY));
+				}
+				dialogNode.Add(dialogSubNode);
+			}
+
+			rootNode.Add(dialogNode);
+		}
+		
+		
+
 		if (levelData.dragdropDisabled)
 			rootNode.Add(new XElement("dragdropDisabled"));
 
