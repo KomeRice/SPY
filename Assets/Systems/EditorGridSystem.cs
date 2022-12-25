@@ -267,12 +267,13 @@ public class EditorGridSystem : FSystem {
 						position = getPositionFromXElement(element);
 						slotId = int.Parse(element.Attribute("slotId").Value);
 						orientation = (ObjectDirection) int.Parse(element.Attribute("direction").Value);
-						setTile(position.Item1, position.Item2, Cell.Door, orientation);
+						setTile(position.Item1, position.Item2, Cell.Door, orientation, slotId: slotId);
 						((Door)paintableGrid.floorObjects[position]).slot = slotId;
 						
 						break;
 					case "player":
 						// TODO: player script type
+						// Factorise
 						position = getPositionFromXElement(element);
 						orientation = (ObjectDirection) int.Parse(element.Attribute("direction").Value);
 						setTile(position.Item1, position.Item2, Cell.Player, orientation);
@@ -372,7 +373,9 @@ public class EditorGridSystem : FSystem {
 		return new Vector2Int(vec.x + _gridSize.x / 2, _gridSize.y / 2 + vec.y * -1);
 	}
 
-	public void setTile(int x, int y, Cell cell, ObjectDirection rotation = ObjectDirection.Up)
+	public void setTile(int x, int y, Cell cell, ObjectDirection rotation = ObjectDirection.Up, bool state = true, int slotId = 0,
+		ScriptType scriptType = ScriptType.Undefined, ScriptEditMode editMode = ScriptEditMode.Editable,
+		int enemyRange = 3, bool selfRange = false)
 	{
 		var tilemapGo = getTilemap();
 		var tuplePos = new Tuple<int, int>(x, y);
@@ -390,11 +393,11 @@ public class EditorGridSystem : FSystem {
 			tilemapGo.GetComponent<PaintableGrid>().floorObjects[tuplePos] = 
 				cell switch
 				{
-					Cell.Player => new PlayerRobot("Bob", ObjectDirection.Up, x, y),
-					Cell.Enemy => new EnemyRobot("Eve", ObjectDirection.Up, x, y),
-					Cell.Decoration => new DecorationObject(defaultDecoration, ObjectDirection.Up, x, y),
-					Cell.Door => new Door(ObjectDirection.Up, x, y, 0),
-					Cell.Console => new Console(ObjectDirection.Up, x, y, 0, true),
+					Cell.Player => new PlayerRobot("Bob", rotation, x, y, scriptType: scriptType, editMode: editMode),
+					Cell.Enemy => new EnemyRobot("Eve", rotation, x, y, scriptType: scriptType, editMode: editMode, range: enemyRange, selfRange: selfRange),
+					Cell.Decoration => new DecorationObject(defaultDecoration, rotation, x, y),
+					Cell.Door => new Door(rotation, x, y, slotId),
+					Cell.Console => new Console(rotation, x, y, slotId, state),
 					Cell.Coin => new FloorObject(Cell.Coin, ObjectDirection.Up, x, y, orientable:false, selectable: false),
 					_ => null
 				};
@@ -831,11 +834,12 @@ public class Robot : FloorObject
 	public ScriptType scriptType;
 	public ScriptEditMode scriptEditMode;
 
-	protected Robot(Cell cellType, string associatedScriptName, ObjectDirection orientation, int x, int y, bool orientable = true) : base(cellType, orientation, x, y, orientable)
+	protected Robot(Cell cellType, string associatedScriptName, ObjectDirection orientation, int x, int y
+		, bool orientable = true, ScriptType scriptType = ScriptType.Undefined, ScriptEditMode editMode = ScriptEditMode.Editable) : base(cellType, orientation, x, y, orientable)
 	{
 		this.associatedScriptName = associatedScriptName;
-		scriptType = ScriptType.Undefined;
-		scriptEditMode = ScriptEditMode.Locked;
+		this.scriptType = scriptType;
+		scriptEditMode = editMode;
 	}
 
 	public void editName(string newName)
@@ -846,8 +850,9 @@ public class Robot : FloorObject
 
 public class PlayerRobot : Robot
 {
-	public PlayerRobot(string associatedScriptName, ObjectDirection orientation, int x, int y) : 
-		base(Cell.Player, associatedScriptName, orientation, x, y)
+	public PlayerRobot(string associatedScriptName, ObjectDirection orientation, int x, int y,
+		bool orientable = true, ScriptType scriptType = ScriptType.Undefined, ScriptEditMode editMode = ScriptEditMode.Editable) : 
+		base(Cell.Player, associatedScriptName, orientation, x, y, orientable, scriptType, editMode)
 	{
 	}
 }
@@ -859,11 +864,15 @@ public class EnemyRobot : Robot
 	public int range;
 
 	public EnemyRobot(string associatedScriptName, ObjectDirection orientation, int x, int y, 
+		ScriptType scriptType = ScriptType.Undefined, ScriptEditMode editMode = ScriptEditMode.Editable,
 		bool selfRange = false, EnemyTypeRange typeRange = EnemyTypeRange.LineView, bool orientable = true, bool selectable = true, int range = 3)
 		: base(Cell.Enemy, associatedScriptName,orientation, x, y)
 	{
 		this.typeRange = typeRange;
 		this.selfRange = selfRange;
 		this.range = range;
+		this.associatedScriptName = associatedScriptName;
+		this.scriptType = scriptType;
+		scriptEditMode = editMode;
 	}
 }
