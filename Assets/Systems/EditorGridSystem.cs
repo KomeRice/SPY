@@ -30,9 +30,6 @@ public class EditorGridSystem : FSystem {
 	// Use to init system before the first onProcess call
 	protected override void onStart()
 	{
-		var tilemapGo = getTilemap();
-		getTilemap().GetComponent<PaintableGrid>().floorObjects = new Dictionary<Tuple<int, int>, FloorObject>();
-		getTilemap().GetComponent<PaintableGrid>().gridActive = true;
 		initGrid();
 	}
 
@@ -49,9 +46,11 @@ public class EditorGridSystem : FSystem {
 	// Use to process your families.
 	protected override void onProcess(int familiesUpdateCount)
 	{
+		if (!getTilemap().GetComponent<PaintableGrid>().gridActive)
+			return;
+		
 		var pos = mousePosToGridPos();
-		if (0 > pos.x || pos.x >= _gridSize.x || 0 > pos.y || pos.y >= _gridSize.y || !canBePlaced(getActiveBrush(), pos.x, pos.y)
-		    || !getTilemap().GetComponent<PaintableGrid>().gridActive)
+		if (0 > pos.x || pos.x >= _gridSize.x || 0 > pos.y || pos.y >= _gridSize.y || !canBePlaced(getActiveBrush(), pos.x, pos.y))
 		{
 			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 			return;
@@ -92,6 +91,8 @@ public class EditorGridSystem : FSystem {
 
 	private void initGrid(int width = 16, int height = 10)
 	{
+		getTilemap().GetComponent<PaintableGrid>().floorObjects = new Dictionary<Tuple<int, int>, FloorObject>();
+		getTilemap().GetComponent<PaintableGrid>().gridActive = true;
 		_gridSize = new Vector2Int(width, height);
 		getTilemap().GetComponent<PaintableGrid>().grid = new Cell[width, height];
 		for (var i = 0; i < width; ++i)
