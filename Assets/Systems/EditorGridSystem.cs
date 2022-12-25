@@ -1,8 +1,16 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
 using UnityEngine;
 using FYFY;
+using TMPro;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 public class EditorGridSystem : FSystem {
 	public static EditorGridSystem instance;
@@ -19,8 +27,14 @@ public class EditorGridSystem : FSystem {
 	public Tile coinTile;
 	public Texture2D placingCursor;
 	public string defaultDecoration;
+	public GameObject mainCanvas;
+	public GameObject dialogViewPortContent;
+	public GameObject listEntryPrefab;
+	
 	private Vector2Int _gridSize;
 	private Family f_paintables = FamilyManager.getFamily(new AllOfComponents(typeof(PaintableGrid)));
+	public Family f_editorblocks = FamilyManager.getFamily(new AllOfComponents(typeof(EditorBlockData)));
+	private LevelData _levelData = FamilyManager.getFamily(new AllOfComponents(typeof(LevelData))).First().GetComponent<LevelData>();
 
 	public EditorGridSystem()
 	{
@@ -30,7 +44,9 @@ public class EditorGridSystem : FSystem {
 	// Use to init system before the first onProcess call
 	protected override void onStart()
 	{
-		initGrid();
+		getTilemap().SetActive(false);
+		_levelData.isReady = false;
+		MainLoop.instance.StartCoroutine(waitForLevelLoad());
 	}
 
 	// Use to update member variables when system pause. 
@@ -47,8 +63,10 @@ public class EditorGridSystem : FSystem {
 	protected override void onProcess(int familiesUpdateCount)
 	{
 		if (!getTilemap().GetComponent<PaintableGrid>().gridActive)
+		{
 			return;
-		
+		}
+
 		var pos = mousePosToGridPos();
 		if (0 > pos.x || pos.x >= _gridSize.x || 0 > pos.y || pos.y >= _gridSize.y || !canBePlaced(getActiveBrush(), pos.x, pos.y))
 		{
@@ -89,7 +107,7 @@ public class EditorGridSystem : FSystem {
 			setTile(pos.x, pos.y, getActiveBrush());
 	}
 
-	private void initGrid(int width = 16, int height = 10)
+	private void initGrid(int width = 10, int height = 10)
 	{
 		getTilemap().GetComponent<PaintableGrid>().floorObjects = new Dictionary<Tuple<int, int>, FloorObject>();
 		getTilemap().GetComponent<PaintableGrid>().gridActive = true;
@@ -109,6 +127,239 @@ public class EditorGridSystem : FSystem {
 		}
 	}
 
+	private IEnumerator waitForLevelLoad()
+	{
+		while (string.IsNullOrEmpty(_levelData.filePath))
+		{
+			yield return null;
+		}
+
+		if (File.Exists(_levelData.filePath))
+		{
+			var xmlScriptGenerator = new XmlScriptGenerator(mainCanvas);
+			var paintableGrid = getTilemap().GetComponent<PaintableGrid>();
+			var xmlFile = XDocument.Load(_levelData.filePath);
+			var scripts = new List<XElement>();
+			var robots = new Dictionary<string, Tuple<int, int>>();
+			foreach (var element in xmlFile.Descendants("level").Elements())
+			{
+				Tuple<int, int> position;
+				ObjectDirection orientation;
+				int slotId;
+				string associatedScriptName;
+				switch (element.Name.LocalName)
+				{
+					case "map":
+						var lines = element.Elements().ToList();
+						var height = lines.Count;
+						var width = lines[0].Elements().ToList().Count;
+						initGrid(width, height);
+						_levelData.height = height;
+						_levelData.width = width;
+						for(var i = 0; i < height; i++)
+						{
+							var cols = lines[i].Elements().ToList();
+							for (var j = 0; j < cols.Count; j++)
+							{
+								if (int.TryParse(cols[j].Attribute("value")!.Value, out var cellValue))
+								{
+									setTile(j, i, (Cell) cellValue);
+								}
+								else
+								{
+									Debug.Log($"Warning: Skipped cell ({j},{i}) from file {_levelData.filePath}");
+								}
+							}
+						}
+
+						break;
+					
+					case "dialogs":
+						foreach (var dialog in element.Descendants())
+						{
+							var newEntry = Object.Instantiate(listEntryPrefab, dialogViewPortContent.transform);
+							GameObjectManager.bind(newEntry);
+							var component = newEntry.GetComponent<DialogListEntry>();
+							if (dialog.Attribute("text") != null)
+							{
+								component.dialogText = dialog.Attribute("text")?.Value;
+								component.GetComponentInChildren<TMP_Text>().text = component.dialogText;
+							}
+
+							if (dialog.Attribute("camX") != null && dialog.Attribute("camY") != null)
+							{
+								component.cameraMove = true;
+								int.TryParse(dialog.Attribute("camX")?.Value, out var camX);
+								int.TryParse(dialog.Attribute("camY")?.Value, out var camY);
+								component.cameraMoveX = camX;
+								component.cameraMoveY = camY;
+							}
+							else
+							{
+								component.cameraMove = false;
+							}
+						}
+
+						break;
+					case "dragdropDisabled":
+						_levelData.dragdropDisabled = true;
+						
+						break;
+					case "executionLimit":
+						_levelData.executionLimitEnabled = true;
+						int.TryParse(element.Attribute("amount")?.Value, out _levelData.executionLimit);
+						
+						break;
+					case "fog":
+						_levelData.fogEnabled = true;
+						
+						break;
+					case "blockLimits":
+						var dict = new Dictionary<string, EditorBlockData>();
+						foreach (var editorBlock in f_editorblocks)
+						{
+							var component = editorBlock.GetComponent<EditorBlockData>();
+							dict[component.blockName] = component;
+						}
+
+						foreach (var blockLimit in element.Elements())
+						{
+							var blockName = blockLimit.Attribute("blockType").Value;
+							var blockAmount = int.Parse(blockLimit.Attribute("limit").Value);
+							if (blockAmount == 0)
+								continue;
+							
+							dict[blockName].transform.GetChild(4).GetComponent<Toggle>().isOn = false;
+							dict[blockName].transform.GetChild(3).GetComponent<Toggle>().interactable = true;
+
+							if (blockAmount <= 0) 
+								continue;
+							
+							dict[blockName].transform.GetChild(3).GetComponent<Toggle>().isOn = false;
+							var field = dict[blockName].transform.GetChild(2).GetComponent<InputField>();
+							field.interactable = true;
+							field.text = blockAmount.ToString();
+						}
+
+						break;
+					case "coin":
+						position = getPositionFromXElement(element);
+						setTile(position.Item1, position.Item2, Cell.Coin);
+						
+						break;
+					case "console":
+						position = getPositionFromXElement(element);
+						var state = int.Parse(element.Attribute("state").Value);
+						orientation = (ObjectDirection) int.Parse(element.Attribute("direction").Value);
+
+						setTile(position.Item1, position.Item2, Cell.Console, orientation);
+
+						if (element.HasElements)
+						{
+							slotId = int.Parse(element.Element("slot").Attribute("slotId").Value); 
+							((Console)paintableGrid.floorObjects[position]).slot = slotId;
+						}
+
+						((Console)paintableGrid.floorObjects[position]).state = state == 1;
+						
+						break;
+					case "door":
+						position = getPositionFromXElement(element);
+						slotId = int.Parse(element.Attribute("slotId").Value);
+						orientation = (ObjectDirection) int.Parse(element.Attribute("direction").Value);
+						setTile(position.Item1, position.Item2, Cell.Door, orientation);
+						((Door)paintableGrid.floorObjects[position]).slot = slotId;
+						
+						break;
+					case "player":
+						// TODO: player script type
+						position = getPositionFromXElement(element);
+						orientation = (ObjectDirection) int.Parse(element.Attribute("direction").Value);
+						setTile(position.Item1, position.Item2, Cell.Player, orientation);
+						
+						if (element.Attribute("associatedScriptName") != null)
+						{
+							associatedScriptName = element.Attribute("associatedScriptName").Value;
+							((PlayerRobot)paintableGrid.floorObjects[position]).associatedScriptName =
+								associatedScriptName;
+							robots[associatedScriptName] = position;
+						}
+						
+						break;
+					case "enemy":
+						position = getPositionFromXElement(element);
+						orientation = (ObjectDirection) int.Parse(element.Attribute("direction").Value);
+						setTile(position.Item1, position.Item2, Cell.Enemy, orientation);
+						
+						if (element.Attribute("associatedScriptName") != null)
+						{
+							associatedScriptName = element.Attribute("associatedScriptName").Value;
+							((PlayerRobot)paintableGrid.floorObjects[position]).associatedScriptName =
+								associatedScriptName;
+							robots[associatedScriptName] = position;
+						}
+						
+						var enemyRange = int.Parse(element.Attribute("range").Value);
+						var selfRange = element.Attribute("selfRange").Value == "True";
+						var typeRange = (EnemyTypeRange)int.Parse(element.Attribute("typeRange").Value);
+						((EnemyRobot)paintableGrid.floorObjects[position]).range = enemyRange;
+						((EnemyRobot)paintableGrid.floorObjects[position]).selfRange = selfRange;
+						((EnemyRobot)paintableGrid.floorObjects[position]).typeRange = typeRange;
+						
+						break;
+					case "script":
+						// TODO: handle script types
+						scripts.Add(element);
+						
+						break;
+					case "decoration":
+						position = getPositionFromXElement(element);
+						orientation = (ObjectDirection) int.Parse(element.Attribute("direction").Value);
+						var decoPath = element.Attribute("name").Value;
+						setTile(position.Item1, position.Item2, Cell.Decoration, orientation);
+						((DecorationObject)paintableGrid.floorObjects[position]).path = decoPath;
+						
+						break;
+					case "score":
+						_levelData.scoreEnabled = true;
+						_levelData.scoreTwoStars = int.Parse(element.Attribute("twoStars").Value);
+						_levelData.scoreThreeStars = int.Parse(element.Attribute("threeStars").Value);
+						
+						break;
+					default:
+						Debug.Log($"Ignored unexpected node type: {element.Name}");
+						
+						break;
+				}
+			}
+
+			foreach (var scriptElement in scripts)
+			{
+				var node = new XmlDocument().ReadNode(scriptElement.CreateReader());
+				xmlScriptGenerator.readXMLScript(node, node.Attributes.GetNamedItem("name").Value, UIRootContainer.EditMode.Editable, UIRootContainer.SolutionType.Undefined);
+			}
+
+			_levelData.requireRefresh = true;
+		}
+		else
+		{
+			initGrid(_levelData.width, _levelData.height);
+		}
+
+		_levelData.isReady = true;
+		getTilemap().SetActive(true);
+	}
+
+	private Tuple<int, int> getPositionFromXElement(XElement element)
+	{
+		if (element.Attribute("posX") == null || element.Attribute("posY") == null)
+			return null;
+
+		return new Tuple<int, int>(
+			int.Parse(element.Attribute("posX")?.Value ?? throw new InvalidOperationException()),
+			int.Parse(element.Attribute("posY")?.Value ?? throw new InvalidOperationException()));
+	}
+	
 	private Vector2Int mousePosToGridPos()
 	{
 		var pos = Camera.main!.ScreenToWorldPoint(Input.mousePosition);
@@ -121,7 +372,7 @@ public class EditorGridSystem : FSystem {
 		return new Vector2Int(vec.x + _gridSize.x / 2, _gridSize.y / 2 + vec.y * -1);
 	}
 
-	public void setTile(int x, int y, Cell cell)
+	public void setTile(int x, int y, Cell cell, ObjectDirection rotation = ObjectDirection.Up)
 	{
 		var tilemapGo = getTilemap();
 		var tuplePos = new Tuple<int, int>(x, y);
@@ -147,7 +398,6 @@ public class EditorGridSystem : FSystem {
 					Cell.Coin => new FloorObject(Cell.Coin, ObjectDirection.Up, x, y, orientable:false, selectable: false),
 					_ => null
 				};
-			rotateObject(ObjectDirection.Up, x, y);
 		}
 		else
 		{
@@ -158,6 +408,9 @@ public class EditorGridSystem : FSystem {
 			_gridSize.y / 2 - y, 
 			(int) cell < 10000 ? 0 : -1), 
 			cellToTile(cell));
+		
+		if((int) cell >= 10000)	
+			rotateObject(rotation, x, y);
 	}
 
 	public void resetTile(int x, int y, int z)
@@ -188,7 +441,7 @@ public class EditorGridSystem : FSystem {
 			ObjectDirection.Right => 270,
 			ObjectDirection.Down => 180,
 			ObjectDirection.Left => 90,
-			_ => throw new ArgumentOutOfRangeException(nameof(orientation), orientation,"Impossible orientation")
+			_ => orientationToInt((ObjectDirection) ((int) orientation % 4))
 		};
 	}
 	
@@ -226,6 +479,250 @@ public class EditorGridSystem : FSystem {
 	{
 		var curCell = getTilemap().GetComponent<PaintableGrid>().grid[x, y];
 		return (int) cell < 10000 || curCell == Cell.Ground || (curCell == Cell.Spawn && cell == Cell.Player);
+	}
+	
+	private class XmlScriptGenerator
+	{ 
+		private Family f_draggableElement = FamilyManager.getFamily(new AnyOfComponents(typeof(ElementToDrag)));
+		private GameObject canvas;
+		
+		public XmlScriptGenerator(GameObject canvas)
+		{
+			this.canvas = canvas;
+		}
+		
+		// Lit le XML d'un script est génère les game objects des instructions
+		public void readXMLScript(XmlNode scriptNode, string name, UIRootContainer.EditMode editMode, UIRootContainer.SolutionType type)
+		{
+			if(scriptNode != null){
+				List<GameObject> script = new List<GameObject>();
+				foreach(XmlNode actionNode in scriptNode.ChildNodes){
+					script.Add(readXMLInstruction(actionNode));
+				}
+				GameObjectManager.addComponent<AddSpecificContainer>(MainLoop.instance.gameObject, new { title = name, editState = editMode, typeState = type, script = script });
+			}
+		}
+
+		private GameObject getLibraryItemByName(string itemName)
+		{
+			foreach (GameObject item in f_draggableElement)
+				if (item.name == itemName)
+					return item;
+			return null;
+		}
+
+		// Transforme le noeud d'action XML en gameObject
+		private GameObject readXMLInstruction(XmlNode actionNode){
+			GameObject obj = null;
+			Transform conditionContainer = null;
+			Transform firstContainerBloc = null;
+			Transform secondContainerBloc = null;
+			switch (actionNode.Name)
+			{
+				case "if":
+					obj = EditingUtility.createEditableBlockFromLibrary(getLibraryItemByName("IfThen"), canvas);
+
+					conditionContainer = obj.transform.Find("ConditionContainer");
+					firstContainerBloc = obj.transform.Find("Container");
+
+					// On ajoute les éléments enfants dans les bons containers
+					foreach (XmlNode containerNode in actionNode.ChildNodes)
+					{
+						// Ajout des conditions
+						if (containerNode.Name == "condition")
+						{
+							if (containerNode.HasChildNodes)
+							{
+								// The first child of the conditional container of a If action contains the ReplacementSlot
+								GameObject emptyZone = conditionContainer.GetChild(0).gameObject;
+								// Parse xml condition
+								GameObject child = readXMLCondition(containerNode.FirstChild);
+								// Add child to empty zone
+								EditingUtility.addItemOnDropArea(child, emptyZone);
+							}
+						}
+						else if (containerNode.Name == "container")
+						{
+							if (containerNode.HasChildNodes)
+								processXMLInstruction(firstContainerBloc, containerNode);
+						}
+					}
+					break;
+
+				case "ifElse":
+					obj = EditingUtility.createEditableBlockFromLibrary(getLibraryItemByName("IfElse"), canvas);
+					conditionContainer = obj.transform.Find("ConditionContainer");
+					firstContainerBloc = obj.transform.Find("Container");
+					secondContainerBloc = obj.transform.Find("ElseContainer");
+
+					// On ajoute les éléments enfants dans les bons containers
+					foreach (XmlNode containerNode in actionNode.ChildNodes)
+					{
+						// Ajout des conditions
+						if (containerNode.Name == "condition")
+						{
+							if (containerNode.HasChildNodes)
+							{
+								// The first child of the conditional container of a IfElse action contains the ReplacementSlot
+								GameObject emptyZone = conditionContainer.GetChild(0).gameObject;
+								// Parse xml condition
+								GameObject child = readXMLCondition(containerNode.FirstChild);
+								// Add child to empty zone
+								EditingUtility.addItemOnDropArea(child, emptyZone);
+							}
+						}
+						else if (containerNode.Name == "thenContainer")
+						{
+							if (containerNode.HasChildNodes)
+								processXMLInstruction(firstContainerBloc, containerNode);
+						}
+						else if (containerNode.Name == "elseContainer")
+						{
+							if (containerNode.HasChildNodes)
+								processXMLInstruction(secondContainerBloc, containerNode);
+						}
+					}
+					break;
+
+				case "for":
+					obj = EditingUtility.createEditableBlockFromLibrary(getLibraryItemByName("ForLoop"), canvas);
+					firstContainerBloc = obj.transform.Find("Container");
+					BaseElement action = obj.GetComponent<ForControl>();
+
+					((ForControl)action).nbFor = int.Parse(actionNode.Attributes.GetNamedItem("nbFor").Value);
+					obj.transform.GetComponentInChildren<TMP_InputField>().text = ((ForControl)action).nbFor.ToString();
+
+					if (actionNode.HasChildNodes)
+						processXMLInstruction(firstContainerBloc, actionNode);
+					break;
+
+				case "while":
+					obj = EditingUtility.createEditableBlockFromLibrary(getLibraryItemByName("While"), canvas);
+					firstContainerBloc = obj.transform.Find("Container");
+					conditionContainer = obj.transform.Find("ConditionContainer");
+
+					// On ajoute les éléments enfants dans les bons containers
+					foreach (XmlNode containerNode in actionNode.ChildNodes)
+					{
+						// Ajout des conditions
+						if (containerNode.Name == "condition")
+						{
+							if (containerNode.HasChildNodes)
+							{
+								// The first child of the conditional container of a While action contains the ReplacementSlot
+								GameObject emptyZone = conditionContainer.GetChild(0).gameObject;
+								// Parse xml condition
+								GameObject child = readXMLCondition(containerNode.FirstChild);
+								// Add child to empty zone
+								EditingUtility.addItemOnDropArea(child, emptyZone);
+							}
+						}
+						else if (containerNode.Name == "container")
+						{
+							if (containerNode.HasChildNodes)
+								processXMLInstruction(firstContainerBloc, containerNode);
+						}
+					}
+					break;
+
+				case "forever":
+					obj = EditingUtility.createEditableBlockFromLibrary(getLibraryItemByName("Forever"), canvas);
+					firstContainerBloc = obj.transform.Find("Container");
+
+					if (actionNode.HasChildNodes)
+						processXMLInstruction(firstContainerBloc, actionNode);
+					break;
+				case "action":
+					obj = EditingUtility.createEditableBlockFromLibrary(getLibraryItemByName(actionNode.Attributes.GetNamedItem("type").Value), canvas);
+					break;
+			}
+
+			return obj;
+		}
+
+		private void processXMLInstruction(Transform gameContainer, XmlNode xmlContainer)
+		{
+			// The first child of a control container is an emptySolt
+			GameObject emptySlot = gameContainer.GetChild(0).gameObject;
+			foreach (XmlNode eleNode in xmlContainer.ChildNodes)
+				EditingUtility.addItemOnDropArea(readXMLInstruction(eleNode), emptySlot);
+		}
+
+		// Transforme le noeud d'action XML en gameObject élément/opérator
+		private GameObject readXMLCondition(XmlNode conditionNode) {
+			GameObject obj = null;
+			ReplacementSlot[] slots = null;
+			switch (conditionNode.Name)
+			{
+				case "and":
+					obj = EditingUtility.createEditableBlockFromLibrary(getLibraryItemByName("AndOperator"), canvas);
+					slots = obj.GetComponentsInChildren<ReplacementSlot>(true);
+					if (conditionNode.HasChildNodes)
+					{
+						GameObject emptyZone = null;
+						foreach (XmlNode andNode in conditionNode.ChildNodes)
+						{
+							if (andNode.Name == "conditionLeft")
+								// The Left slot is the second ReplacementSlot (first is the And operator)
+								emptyZone = slots[1].gameObject;
+							if (andNode.Name == "conditionRight")
+								// The Right slot is the third ReplacementSlot
+								emptyZone = slots[2].gameObject;
+							if (emptyZone != null && andNode.HasChildNodes)
+							{
+								// Parse xml condition
+								GameObject child = readXMLCondition(andNode.FirstChild);
+								// Add child to empty zone
+								EditingUtility.addItemOnDropArea(child, emptyZone);
+							}
+							emptyZone = null;
+						}
+					}
+					break;
+
+				case "or":
+					obj = EditingUtility.createEditableBlockFromLibrary(getLibraryItemByName("OrOperator"), canvas);
+					slots = obj.GetComponentsInChildren<ReplacementSlot>(true);
+					if (conditionNode.HasChildNodes)
+					{
+						GameObject emptyZone = null;
+						foreach (XmlNode orNode in conditionNode.ChildNodes)
+						{
+							if (orNode.Name == "conditionLeft")
+								// The Left slot is the second ReplacementSlot (first is the And operator)
+								emptyZone = slots[1].gameObject;
+							if (orNode.Name == "conditionRight")
+								// The Right slot is the third ReplacementSlot
+								emptyZone = slots[2].gameObject;
+							if (emptyZone != null && orNode.HasChildNodes)
+							{
+								// Parse xml condition
+								GameObject child = readXMLCondition(orNode.FirstChild);
+								// Add child to empty zone
+								EditingUtility.addItemOnDropArea(child, emptyZone);
+							}
+							emptyZone = null;
+						}
+					}
+					break;
+
+				case "not":
+					obj = EditingUtility.createEditableBlockFromLibrary(getLibraryItemByName("NotOperator"), canvas);
+					if (conditionNode.HasChildNodes)
+					{
+						GameObject emptyZone = obj.transform.Find("Container").GetChild(1).gameObject;
+						GameObject child = readXMLCondition(conditionNode.FirstChild);
+						// Add child to empty zone
+						EditingUtility.addItemOnDropArea(child, emptyZone);
+					}
+					break;
+				case "captor":
+					obj = EditingUtility.createEditableBlockFromLibrary(getLibraryItemByName(conditionNode.Attributes.GetNamedItem("type").Value), canvas);
+					break;
+			}
+
+			return obj;
+		}
 	}
 }
 

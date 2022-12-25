@@ -83,7 +83,21 @@ public class EditorLevelDataSystem : FSystem {
 	}
 
 	// Use to process your families.
-	protected override void onProcess(int familiesUpdateCount) {
+	protected override void onProcess(int familiesUpdateCount)
+	{
+		if (!getData().requireRefresh) 
+			return;
+		
+		executionLimitContainer.GetComponentInChildren<Toggle>().isOn = getData().executionLimitEnabled;
+		if(getData().executionLimitEnabled)
+			executionLimitContainer.GetComponentInChildren<InputField>().text = getData().executionLimit.ToString();
+		fogToggle.GetComponent<Toggle>().isOn = getData().fogEnabled;
+		dragAndDropToggle.GetComponent<Toggle>().isOn = getData().dragdropDisabled;
+		scoreContainer.GetComponentInChildren<Toggle>().isOn = getData().scoreEnabled;
+		if (!getData().scoreEnabled) return;
+		scoreContainer.transform.GetChild(1).GetComponent<InputField>().text = getData().scoreTwoStars.ToString(); 
+		scoreContainer.transform.GetChild(2).GetComponent<InputField>().text = getData().scoreThreeStars.ToString();
+		getData().requireRefresh = false;
 	}
 
 	public void hideToggleChanged(int index)

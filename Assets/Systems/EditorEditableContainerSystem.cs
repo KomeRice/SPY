@@ -17,6 +17,7 @@ public class EditorEditableContainerSystem : FSystem
 	private Family f_addSpecificContainer = FamilyManager.getFamily(new AllOfComponents(typeof(AddSpecificContainer)));
 	private Family f_gameLoaded = FamilyManager.getFamily(new AllOfComponents(typeof(GameLoaded)));
 	private Family f_paintables = FamilyManager.getFamily(new AllOfComponents(typeof(PaintableGrid)));
+	private LevelData _levelData = FamilyManager.getFamily(new AllOfComponents(typeof(LevelData))).First().GetComponent<LevelData>();
 
 	// Les variables
 	public GameObject agentSelected = null;
@@ -41,7 +42,6 @@ public class EditorEditableContainerSystem : FSystem
 		if (go != null)
 			gameData = go.GetComponent<GameData>();
 
-		MainLoop.instance.StartCoroutine(tcheckLinkName());
 		f_gameLoaded.addEntryCallback(delegate {
 			GameObject gameDataGO = GameObject.Find("GameData");
 			if (gameDataGO != null && !gameDataGO.GetComponent<GameData>().dragDropEnabled)
@@ -56,6 +56,8 @@ public class EditorEditableContainerSystem : FSystem
 				addContainerButton.interactable = false;
 			}
 		});
+
+		MainLoop.instance.StartCoroutine(waitForLevelReady());
 	}
 
     protected override void onProcess(int familiesUpdateCount)
@@ -88,6 +90,14 @@ public class EditorEditableContainerSystem : FSystem
 	{
 		addSpecificContainer();
 		MainLoop.instance.StartCoroutine(syncEditableScrollBars());
+	}
+
+	private IEnumerator waitForLevelReady()
+	{
+		while (!_levelData.isReady)
+			yield return null;
+		
+		// TODO: Fix levels with existing scripts not showing up in the editor until a new script is added
 	}
 
 	// Move editable view on the last editable container

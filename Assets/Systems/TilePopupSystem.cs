@@ -11,6 +11,7 @@ using UnityEngine.UI;
 public class TilePopupSystem : FSystem {
 	private Family f_paintables = FamilyManager.getFamily(new AllOfComponents(typeof(PaintableGrid)));
 	private Family f_orienters = FamilyManager.getFamily(new AllOfComponents(typeof(OrienterButton)));
+	private Family f_levelData = FamilyManager.getFamily(new AllOfComponents(typeof(LevelData)));
 
 	public static TilePopupSystem instance;
 	public GameObject orientationPopup;
@@ -23,7 +24,6 @@ public class TilePopupSystem : FSystem {
 	private const string FurniturePrefix = "Prefabs/Modern Furniture/Prefabs/";
 	private const string PathXmlPrefix = "Modern Furniture/Prefabs/";
 	
-	private Vector2Int _gridsize;
     private List<GameObject> activePopups = new List<GameObject>();
     private Dictionary<string, string> furnitureNameToPath = new Dictionary<string, string>();
 
@@ -36,8 +36,6 @@ public class TilePopupSystem : FSystem {
 	protected override void onStart()
 	{
 		hideAllPopups();
-		_gridsize = new Vector2Int(getTilemap().GetComponent<PaintableGrid>().grid.GetLength(0),
-			getTilemap().GetComponent<PaintableGrid>().grid.GetLength(1));
 		initFurniturePopup();
 	}
 
@@ -296,8 +294,11 @@ public class TilePopupSystem : FSystem {
 
 	private Vector3Int coordsToGridCoords(int x, int y)
 	{
-		return new Vector3Int(x - _gridsize.x / 2,
-			_gridsize.y / 2 - y, -1);
+		var levelData = f_levelData.First().GetComponent<LevelData>();
+		var gridsize = new Vector2Int(levelData.width, levelData.height);
+		
+		return new Vector3Int(x - gridsize.x / 2,
+			gridsize.y / 2 - y, -1);
 	}
 	
 	private int orientationToInt(ObjectDirection orientation)

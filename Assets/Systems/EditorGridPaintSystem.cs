@@ -10,7 +10,6 @@ public class EditorGridPaintSystem : FSystem {
 	private Family f_paintables = FamilyManager.getFamily(new AllOfComponents(typeof(PaintableGrid)));
 	private Family f_brushes = FamilyManager.getFamily(new AllOfComponents(typeof(CellBrush)));
 
-	private Vector2Int _gridSize;
 
 	public EditorGridPaintSystem()
 	{
@@ -20,9 +19,6 @@ public class EditorGridPaintSystem : FSystem {
 	// Use to init system before the first onProcess call
 	protected override void onStart()
 	{
-		var grid = getTilemap().GetComponent<PaintableGrid>().grid;
-		_gridSize = new Vector2Int(grid.GetLength(0), grid.GetLength(1));
-		
 		foreach (var brush in f_brushes)
 		{
 			if (brush.GetComponent<CellBrush>().brush != Cell.Select) 

@@ -21,7 +21,6 @@ public class EditorDialogManagerSystem : FSystem
 
 	public static EditorDialogManagerSystem instance;
 	private Family f_paintables = FamilyManager.getFamily(new AllOfComponents(typeof(PaintableGrid)));
-	private Vector2Int _gridsize;
 
 	public EditorDialogManagerSystem()
 	{
@@ -31,8 +30,6 @@ public class EditorDialogManagerSystem : FSystem
 	// Use to init system before the first onProcess call
 	protected override void onStart()
 	{
-		var grid = f_paintables.First().GetComponent<PaintableGrid>().grid;
-		_gridsize = new Vector2Int(grid.GetLength(0), grid.GetLength(1));
 		dialogEditPanel.SetActive(false);
 	}
 
@@ -126,6 +123,9 @@ public class EditorDialogManagerSystem : FSystem
 
 	public void checkCoordRange(GameObject go)
 	{
+		var grid = f_paintables.First().GetComponent<PaintableGrid>().grid; 
+		var gridsize = new Vector2Int(grid.GetLength(0), grid.GetLength(1));
+		
 		var dimension = go.name == "CameraX" ? 0 : 1;
 		if (string.IsNullOrEmpty(go.GetComponent<InputField>().text))
 		{
@@ -135,7 +135,7 @@ public class EditorDialogManagerSystem : FSystem
 
 		var coord = int.Parse(go.GetComponent<InputField>().text);
 		coord = Math.Max(0, coord);
-		coord = Math.Min(_gridsize[dimension] - 1, coord);
+		coord = Math.Min(gridsize[dimension] - 1, coord);
 		go.GetComponent<InputField>().text = coord.ToString();
 	}
 

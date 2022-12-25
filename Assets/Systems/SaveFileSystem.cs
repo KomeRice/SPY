@@ -203,6 +203,24 @@ public class SaveFileSystem : FSystem
 		}
 		
 		xDocument.Add(rootNode);
+
+		if (levelData.filePath.Contains(Application.streamingAssetsPath))
+		{
+			Debug.Log("Trying to write to streaming assets...");
+			try
+			{
+				xDocument.Save(levelData.filePath);
+			}
+			catch (Exception e)
+			{
+				Debug.Log($"Caught {e.Message} while trying to write to streaming assets");
+			}
+		}
+		else
+		{
+			xDocument.Save(levelData.filePath);
+		}
+
 		Debug.Log($"Done: \n{xDocument}");
 	}
 
@@ -317,10 +335,10 @@ public class SaveFileSystem : FSystem
 		{
 			name = captor.captorType switch
 			{
-				BaseCaptor.CaptorType.WallFront => "Wall",
+				BaseCaptor.CaptorType.WallFront => "WallFront",
 				BaseCaptor.CaptorType.WallLeft => "WallLeft",
 				BaseCaptor.CaptorType.WallRight => "WallRight",
-				BaseCaptor.CaptorType.Enemy => "Enemie",
+				BaseCaptor.CaptorType.Enemy => "Enemy",
 				BaseCaptor.CaptorType.RedArea => "RedArea",
 				BaseCaptor.CaptorType.FieldGate => "FieldGate",
 				BaseCaptor.CaptorType.Terminal => "Terminal",
