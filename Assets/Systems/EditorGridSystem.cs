@@ -309,8 +309,19 @@ public class EditorGridSystem : FSystem {
 						
 						break;
 					case "script":
-						// TODO: handle script types
 						scripts.Add(element);
+						var scriptName = element.Attribute("name").Value;
+						var editMode = ScriptEditMode.Locked;
+						var scriptType = ScriptType.Undefined;
+						if (element.Attribute("editMode") != null)
+						{
+							editMode = (ScriptEditMode) int.Parse(element.Attribute("editMode").Value);
+						}
+						if (element.Attribute("type") != null)
+						{
+							scriptType = (ScriptType) int.Parse(element.Attribute("type").Value);
+						}
+						Robot.setParams(scriptName, scriptType, editMode);
 						
 						break;
 					case "decoration":
@@ -831,20 +842,56 @@ public class Door : FloorObject
 public class Robot : FloorObject
 {
 	public string associatedScriptName;
-	public ScriptType scriptType;
-	public ScriptEditMode scriptEditMode;
+	private static readonly Dictionary<string, Tuple<ScriptType, ScriptEditMode>> ScriptParams = 
+		new Dictionary<string, Tuple<ScriptType, ScriptEditMode>>();
 
 	protected Robot(Cell cellType, string associatedScriptName, ObjectDirection orientation, int x, int y
 		, bool orientable = true, ScriptType scriptType = ScriptType.Undefined, ScriptEditMode editMode = ScriptEditMode.Editable) : base(cellType, orientation, x, y, orientable)
 	{
 		this.associatedScriptName = associatedScriptName;
-		this.scriptType = scriptType;
-		scriptEditMode = editMode;
+		if (!hasScriptParams())
+		{
+			setScriptParams(scriptType, editMode);
+		}
 	}
 
 	public void editName(string newName)
 	{
 		associatedScriptName = newName;
+	}
+
+	public Tuple<ScriptType, ScriptEditMode> getScriptParams()
+	{
+		if (ScriptParams.ContainsKey(associatedScriptName))
+			return ScriptParams[associatedScriptName];
+		ScriptParams[associatedScriptName] =
+			new Tuple<ScriptType, ScriptEditMode>(ScriptType.Undefined, ScriptEditMode.Editable);
+		return ScriptParams[associatedScriptName];
+	}
+
+	public void setScriptParams(ScriptType robotScriptType, ScriptEditMode editMode)
+	{
+		ScriptParams[associatedScriptName] = new Tuple<ScriptType, ScriptEditMode>(robotScriptType, editMode);
+	}
+
+	public bool hasScriptParams()
+	{
+		return ScriptParams.ContainsKey(associatedScriptName);
+	}
+
+	public static void setParams(string name, ScriptType type, ScriptEditMode editMode)
+	{
+		ScriptParams[name] = new Tuple<ScriptType, ScriptEditMode>(type, editMode);
+	}
+
+	public static Tuple<ScriptType, ScriptEditMode> getScriptParamsFromName(string name)
+	{
+		return ScriptParams.ContainsKey(name) ? ScriptParams[name] : null;
+	}
+
+	public static bool nameHasScriptParams(string name)
+	{
+		return ScriptParams.ContainsKey(name);
 	}
 }
 
@@ -866,13 +913,11 @@ public class EnemyRobot : Robot
 	public EnemyRobot(string associatedScriptName, ObjectDirection orientation, int x, int y, 
 		ScriptType scriptType = ScriptType.Undefined, ScriptEditMode editMode = ScriptEditMode.Editable,
 		bool selfRange = false, EnemyTypeRange typeRange = EnemyTypeRange.LineView, bool orientable = true, bool selectable = true, int range = 3)
-		: base(Cell.Enemy, associatedScriptName,orientation, x, y)
+		: base(Cell.Enemy, associatedScriptName,orientation, x, y, orientable, scriptType, editMode)
 	{
 		this.typeRange = typeRange;
 		this.selfRange = selfRange;
 		this.range = range;
 		this.associatedScriptName = associatedScriptName;
-		this.scriptType = scriptType;
-		scriptEditMode = editMode;
 	}
 }

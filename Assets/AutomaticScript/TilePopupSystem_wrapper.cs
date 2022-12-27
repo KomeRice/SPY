@@ -40,4 +40,9 @@ public class TilePopupSystem_wrapper : BaseWrapper
 		MainLoop.callAppropriateSystemMethod (system, "rotateSelectionDown", null);
 	}
 
+	public void onNameUpdate()
+	{
+		MainLoop.callAppropriateSystemMethod (system, "onNameUpdate", null);
+	}
+
 }

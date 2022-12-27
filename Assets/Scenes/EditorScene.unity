@@ -627,7 +627,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 648153724}
   m_HandleRect: {fileID: 648153723}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -16442,6 +16442,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6675379628131237690, guid: ebadf2b22b1b77844be9e1bd06a80eb1,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6675379628131237690, guid: ebadf2b22b1b77844be9e1bd06a80eb1,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6675379628131237690, guid: ebadf2b22b1b77844be9e1bd06a80eb1,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2049420947}
+    - target: {fileID: 6675379628131237690, guid: ebadf2b22b1b77844be9e1bd06a80eb1,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6675379628131237690, guid: ebadf2b22b1b77844be9e1bd06a80eb1,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: onNameUpdate
+      objectReference: {fileID: 0}
+    - target: {fileID: 6675379628131237690, guid: ebadf2b22b1b77844be9e1bd06a80eb1,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: TilePopupSystem_wrapper, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6675379628131237690, guid: ebadf2b22b1b77844be9e1bd06a80eb1,
+        type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ebadf2b22b1b77844be9e1bd06a80eb1, type: 3}
 --- !u!1 &870813799
@@ -26882,8 +26917,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1335666271}
   m_HandleRect: {fileID: 1335666270}
   m_Direction: 0
-  m_Value: -0.00000043433818
-  m_Size: 0.50831175
+  m_Value: -0.00000035417776
+  m_Size: 0.5176231
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -35766,7 +35801,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1105090694}
   m_HandleRect: {fileID: 1105090693}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

@@ -195,9 +195,10 @@ public class SaveFileSystem : FSystem
 			}
 
 			var robot = robots[scriptName];
+			var scriptParams = robot.getScriptParams();
 			scriptNode.Add(new XAttribute("name", robot.associatedScriptName), 
-				new XAttribute("editMode", (int) robot.scriptEditMode),
-				new XAttribute("type", (int) robot.scriptType));
+				new XAttribute("editMode", (int) scriptParams.Item2),
+				new XAttribute("type", (int) scriptParams.Item1));
 			
 			rootNode.Add(scriptNode);
 		}

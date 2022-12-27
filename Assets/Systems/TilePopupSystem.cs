@@ -162,8 +162,10 @@ public class TilePopupSystem : FSystem {
 				_ => scriptNamePopup.GetComponentInChildren<InputField>().text
 			};
 
-			scriptNamePopup.GetComponentsInChildren<Dropdown>()[0].value = (int)((Robot)getSelected()).scriptEditMode;
-			scriptNamePopup.GetComponentsInChildren<Dropdown>()[1].value = (int)((Robot)getSelected()).scriptType;
+			var scriptParams = ((Robot)getSelected()).getScriptParams();
+
+			scriptNamePopup.GetComponentsInChildren<Dropdown>()[0].value = (int)scriptParams.Item2;
+			scriptNamePopup.GetComponentsInChildren<Dropdown>()[1].value = (int)scriptParams.Item1;
 		}
 		else if(getSelected() != null)
 		{
@@ -182,10 +184,8 @@ public class TilePopupSystem : FSystem {
 				scriptNamePopup.GetComponentInChildren<InputField>().text = "";
 			}
 			if(getSelected() is Robot){
-				((Robot)getSelected()).scriptEditMode =
-					(ScriptEditMode)scriptNamePopup.GetComponentsInChildren<Dropdown>()[0].value;
-				((Robot)getSelected()).scriptType =
-					(ScriptType)scriptNamePopup.GetComponentsInChildren<Dropdown>()[1].value;
+				((Robot) getSelected()).setScriptParams((ScriptType)scriptNamePopup.GetComponentsInChildren<Dropdown>()[1].value, 
+					(ScriptEditMode)scriptNamePopup.GetComponentsInChildren<Dropdown>()[0].value);
 			}
 		}
 		scriptNamePopup.SetActive(enabled);
@@ -270,6 +270,21 @@ public class TilePopupSystem : FSystem {
 	public void rotateSelectionDown()
 	{
 		rotateObject(ObjectDirection.Down, getSelected().x, getSelected().y);
+	}
+
+	public void onNameUpdate()
+	{
+		var newText = scriptNamePopup.GetComponentInChildren<InputField>().text;
+		if (!Robot.nameHasScriptParams(newText)) 
+			return;
+		var scriptDropdowns = scriptNamePopup.GetComponentsInChildren<Dropdown>();
+		var editDropdown = scriptDropdowns[1];
+		var typeDropdown = scriptDropdowns[0];
+		var scriptParams = Robot.getScriptParamsFromName(newText);
+		if (scriptParams == null)
+			return;
+		editDropdown.value = (int)scriptParams.Item2;
+		typeDropdown.value = (int)scriptParams.Item1;
 	}
 
 	private FloorObject getSelected()
