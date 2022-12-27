@@ -64,6 +64,7 @@ public class EditorGridSystem : FSystem {
 	{
 		if (!getTilemap().GetComponent<PaintableGrid>().gridActive)
 		{
+			Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 			return;
 		}
 

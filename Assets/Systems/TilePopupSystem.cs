@@ -61,6 +61,9 @@ public class TilePopupSystem : FSystem {
 
 		if (activePopups.Count > 0)
 		{
+			if(Input.GetKeyDown(KeyCode.Escape))
+				hideAllPopups();
+			
 			if (Input.GetMouseButtonDown(0))
 			{
 				if (activePopups.Any(go => go.GetComponent<PopupMouseSensitive>().isOver))

@@ -44,6 +44,12 @@ public class SaveFileSystem : FSystem
 			saveXmlFile();
 	}
 
+	public void SaveAndQuit()
+	{
+		saveXmlFile();
+		GameObjectManager.loadScene("TitleScreen");
+	}
+
 	public void saveXmlFile()
 	{
 		var xDocument = new XDocument();
@@ -127,7 +133,7 @@ public class SaveFileSystem : FSystem
 							new XAttribute("posY", d.y),
 							new XAttribute("posX", d.x),
 							new XAttribute("direction", (int) d.orientation),
-							new XElement("slot", new XAttribute("slotId", d.slot))));
+							new XAttribute("slotId", d.slot)));
 					break;
 				case PlayerRobot pr:
 					rootNode.Add(
@@ -173,18 +179,12 @@ public class SaveFileSystem : FSystem
 			}
 		}
 
-		if (levelData.scoreEnabled)
-		{
-			rootNode.Add(new XElement("score", new XAttribute("twoStars", levelData.scoreTwoStars),
-				new XAttribute("threeStars", levelData.scoreThreeStars)));
-		}
-
 		for (var i = 0; i < editableContainer.transform.childCount; i++)
 		{
 			var editorViewportScriptContainer = editableContainer.transform.GetChild(i).Find("ScriptContainer");
 			var header = editorViewportScriptContainer.Find("Header");
 			var scriptName = header.Find("ContainerName").GetComponent<TMP_InputField>().text;
-			var scriptNode = (getXmlScript(editorViewportScriptContainer.gameObject, "script"));
+			var scriptNode = getXmlScript(editorViewportScriptContainer.gameObject, "script");
 			if (!robots.ContainsKey(scriptName))
 			{
 				scriptNode.Add(new XAttribute("name", scriptName),
@@ -201,6 +201,12 @@ public class SaveFileSystem : FSystem
 				new XAttribute("type", (int) scriptParams.Item1));
 			
 			rootNode.Add(scriptNode);
+		}
+		
+		if (levelData.scoreEnabled)
+		{
+			rootNode.Add(new XElement("score", new XAttribute("twoStars", levelData.scoreTwoStars),
+				new XAttribute("threeStars", levelData.scoreThreeStars)));
 		}
 		
 		xDocument.Add(rootNode);
@@ -232,8 +238,8 @@ public class SaveFileSystem : FSystem
 		{
 			var data = go.GetComponent<EditorBlockData>();
 			var blockName = data.blockName;
-			var hideToggled = go.GetComponentsInChildren<Toggle>()[0].isOn;
-			var limitToggled = go.GetComponentsInChildren<Toggle>()[1].isOn;
+			var hideToggled = go.GetComponentsInChildren<Toggle>()[1].isOn;
+			var unlimitedToggled = go.GetComponentsInChildren<Toggle>()[0].isOn;
 
 			if (hideToggled)
 			{
@@ -241,9 +247,10 @@ public class SaveFileSystem : FSystem
 				continue;
 			}
 
-			if (!limitToggled)
+			if (unlimitedToggled)
 			{
 				result[blockName] = -1;
+				continue;
 			}
 			
 			var limitStr = go.GetComponentInChildren<InputField>().text;
@@ -321,8 +328,8 @@ public class SaveFileSystem : FSystem
 			if (foreverComponent)
 			{
 				var thenContainer = child.transform.Find("Container");
-				var thenXml = getXmlScript(thenContainer.gameObject, "container");
-				result.Add(new XElement("forever", thenXml));
+				var thenXml = getXmlScript(thenContainer.gameObject, "forever");
+				result.Add(new XElement(thenXml));
 			}
 		}
 		return result;

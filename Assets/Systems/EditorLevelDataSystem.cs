@@ -92,7 +92,7 @@ public class EditorLevelDataSystem : FSystem {
 		if(getData().executionLimitEnabled)
 			executionLimitContainer.GetComponentInChildren<InputField>().text = getData().executionLimit.ToString();
 		fogToggle.GetComponent<Toggle>().isOn = getData().fogEnabled;
-		dragAndDropToggle.GetComponent<Toggle>().isOn = getData().dragdropDisabled;
+		dragAndDropToggle.GetComponent<Toggle>().isOn = !getData().dragdropDisabled;
 		scoreContainer.GetComponentInChildren<Toggle>().isOn = getData().scoreEnabled;
 		if (!getData().scoreEnabled) return;
 		scoreContainer.transform.GetChild(1).GetComponent<InputField>().text = getData().scoreTwoStars.ToString(); 

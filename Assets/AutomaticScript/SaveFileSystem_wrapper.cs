@@ -12,6 +12,11 @@ public class SaveFileSystem_wrapper : BaseWrapper
 		MainLoop.initAppropriateSystemField (system, "editableContainer", editableContainer);
 	}
 
+	public void SaveAndQuit()
+	{
+		MainLoop.callAppropriateSystemMethod (system, "SaveAndQuit", null);
+	}
+
 	public void saveXmlFile()
 	{
 		MainLoop.callAppropriateSystemMethod (system, "saveXmlFile", null);
