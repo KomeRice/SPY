@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using FYFY;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// Manage position and Direction component to move agent accordingly
@@ -59,6 +60,20 @@ public class MoveSystem : FSystem {
 			GameObjectManager.removeComponent(forceMove);
 	}
 
+	public void CharacterMovedStatement(string position,  string rotation, string direction)
+	{
+		GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
+		{
+			verb = "moved",
+			objectType = "avatar",
+			activityExtensions = new Dictionary<string, string>() {
+				{ "position", position },
+				{"rotation",rotation},
+				{"direction",direction}
+			}
+		});
+	}
+	
 	private void playMoveAnimation(GameObject go)
     {
 		if (gameData.gameSpeed_current == gameData.gameSpeed_default)
@@ -71,11 +86,11 @@ public class MoveSystem : FSystem {
 			go.GetComponent<Animator>().SetFloat("Walk", -1f);
 			go.GetComponent<Animator>().SetFloat("Run", 1f);
 		}
-	}
+    }
 
 	// Use to process your families.
 	protected override void onProcess(int familiesUpdateCount) {
-
+		
 		foreach (GameObject go in f_movable)
 		{
 			// Manage position

@@ -27,7 +27,7 @@ public static class GBL_Interface {
     // Fill in these fields for GBLxAPI setup.
     //Statements will be sent to all addresses in this list
     public static List<GBLConfig> lrsAddresses = new List<GBLConfig>() {
-        new GBLConfig("https://valid.end.point", "ValidClientKey", "ValidClientSecret")
+        new GBLConfig("https://lrsmocah.lip6.fr/data/xAPI", "03f0ec5ee120bc2380f65b7e9dcfb37f28223695", "1aa1b2a25b7eb321e3e95390500c7b3d9eb569ed")
     };
 	public static string userUUID = ""; // Muratet : overrided in SendStatements system
     public static string playerName = ""; // Muratet : overrided in SendStatements system
