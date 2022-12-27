@@ -34,9 +34,19 @@ public class TitleScreenSystem_wrapper : BaseWrapper
 		MainLoop.callAppropriateSystemMethod (system, "updateScenarioList", null);
 	}
 
+	public void LoadLevelStatement(System.String levelNumber)
+	{
+		MainLoop.callAppropriateSystemMethod (system, "LoadLevelStatement", levelNumber);
+	}
+
 	public void launchLevel()
 	{
 		MainLoop.callAppropriateSystemMethod (system, "launchLevel", null);
+	}
+
+	public void launchEditor()
+	{
+		MainLoop.callAppropriateSystemMethod (system, "launchEditor", null);
 	}
 
 	public void quitGame()
