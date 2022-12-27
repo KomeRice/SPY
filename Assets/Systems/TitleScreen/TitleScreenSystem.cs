@@ -307,6 +307,11 @@ public class TitleScreenSystem : FSystem {
 		LoadLevelStatement(levelToLoad);
 	}
 
+	public void launchEditor()
+	{
+		GameObjectManager.loadScene("EditorScene");
+	}
+
 	// See Quitter button in editor
 	public void quitGame(){
 		Application.Quit();
