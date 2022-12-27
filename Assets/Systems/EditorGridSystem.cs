@@ -295,7 +295,7 @@ public class EditorGridSystem : FSystem {
 						if (element.Attribute("associatedScriptName") != null)
 						{
 							associatedScriptName = element.Attribute("associatedScriptName").Value;
-							((PlayerRobot)paintableGrid.floorObjects[position]).associatedScriptName =
+							((EnemyRobot)paintableGrid.floorObjects[position]).associatedScriptName =
 								associatedScriptName;
 							robots[associatedScriptName] = position;
 						}
