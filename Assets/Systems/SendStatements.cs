@@ -91,16 +91,15 @@ public class SendStatements : FSystem {
         });
     }
     
-
-    public void LevelCompleteStatement(string levelNumber, string time)
+    /*A mettre a la completion d'un niveau levelnumber = niveau */
+    public void LevelCompleteStatement(string levelNumber)
     {
         GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
         {
             verb = "completed",
             objectType = "level",
             activityExtensions = new Dictionary<string, string>() {
-                { "level_number", levelNumber },
-                { "time", time }
+                { "level_number", levelNumber }
             }
         });
     }
@@ -108,8 +107,8 @@ public class SendStatements : FSystem {
 
 
 
-
-    public void CollectedObjetStatement(string ObjectName,string time)
+    /*A mettre quand on collecte un objet*/
+    public void CollectedObjetStatement(string ObjectName)
     {
         GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
         {
@@ -117,12 +116,12 @@ public class SendStatements : FSystem {
             objectType = "key",
             activityExtensions = new Dictionary<string, string>() {
                 { "value", ObjectName },
-                { "time", time },
             }
         });
     }
-
-    public void ActivatedDoorStatement(string ObjectName, string time)
+    
+    /*A mettre quand on active une porte*/
+    public void ActivatedDoorStatement(string ObjectName)
     {
         GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
         {
@@ -130,11 +129,11 @@ public class SendStatements : FSystem {
             objectType = "key",
             activityExtensions = new Dictionary<string, string>() {
                 { "value", ObjectName },
-                { "time", time },
             }
         });
     }
-
+    
+    /*pas mettre pour l'instant*/
     public void HackedRobotStatement(string botId, string time)
     {
         GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
@@ -147,7 +146,8 @@ public class SendStatements : FSystem {
             }
         });
     }
-
+    
+    /*Mettre pour lorsque l'on atteint lobjectif dans un niveau*/
     public void ReachedTPStatement(string time)
     {
         GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 

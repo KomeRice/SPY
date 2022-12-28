@@ -31,6 +31,11 @@ public class DragDropSystem_wrapper : BaseWrapper
 		MainLoop.callAppropriateSystemMethod (system, "beginDragElementFromLibrary", element);
 	}
 
+	public void ActionDraggredStatement(System.String actionName)
+	{
+		MainLoop.callAppropriateSystemMethod (system, "ActionDraggredStatement", actionName);
+	}
+
 	public void beginDragElementFromEditableScript(UnityEngine.EventSystems.BaseEventData element)
 	{
 		MainLoop.callAppropriateSystemMethod (system, "beginDragElementFromEditableScript", element);

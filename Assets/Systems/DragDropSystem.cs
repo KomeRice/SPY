@@ -175,7 +175,7 @@ public class DragDropSystem : FSystem
 		GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
 		{
 			verb = "dragged",
-			objectType = "action",
+			objectType = "draggable",
 			activityExtensions = new Dictionary<string, string>() {
 				{ "action_name", actionName }
 			}

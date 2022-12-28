@@ -303,8 +303,8 @@ public class TitleScreenSystem : FSystem {
 		gameData.scenarioName = campaignKey;
 		gameData.levelToLoad = levelToLoad;
 		gameData.scenario = defaultCampaigns[campaignKey];
-		GameObjectManager.loadScene("MainScene");
 		LoadLevelStatement(levelToLoad);
+		GameObjectManager.loadScene("MainScene");
 	}
 
 	public void launchEditor()

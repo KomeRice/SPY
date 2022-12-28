@@ -1,10 +1,282 @@
 {
     "action": {},
-    "activity": {},
+    "activity": {
+        "action": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/activity-types/action",
+            "name": {
+                "en-US": "action"
+            }
+        },
+        "animation": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/activity-types/animation",
+            "name": {
+                "en-US": "animation"
+            }
+        },
+        "avatar": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/activity-types/avatar",
+            "name": {
+                "en-US": "avatar"
+            }
+        },
+        "draggable": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/activity-types/draggable",
+            "name": {
+                "en-US": "draggable"
+            }
+        },
+        "enemybot": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/activity-types/enemybot",
+            "name": {
+                "en-US": "enemybot"
+            }
+        },
+        "feedback": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/activity-types/feedback",
+            "name": {
+                "en-US": "feedback"
+            }
+        },
+        "interactable": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/activity-types/interactable",
+            "name": {
+                "en-US": "interactable"
+            }
+        },
+        "key": {
+            "description": {
+                "en-US": "a keyboard or mouse key."
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/activity-types/key",
+            "name": {
+                "en-US": "key"
+            }
+        },
+        "level": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/activity-types/level",
+            "name": {
+                "en-US": "level"
+            }
+        },
+        "puzzle": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/activity-types/puzzle",
+            "name": {
+                "en-US": "puzzle"
+            }
+        },
+        "teleporter": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/activity-types/teleporter",
+            "name": {
+                "en-US": "teleporter"
+            }
+        },
+        "text": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/activity-types/text",
+            "name": {
+                "en-US": "text"
+            }
+        },
+        "toggable": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/activity-types/toggable",
+            "name": {
+                "en-US": "toggable"
+            }
+        },
+        "viewable": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/activity-types/viewable",
+            "name": {
+                "en-US": "viewable"
+            }
+        }
+    },
     "content": {},
     "direction": {},
     "domain": {},
-    "extension": {},
+    "extension": {
+        "action_name": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/extensions/action_name",
+            "name": {
+                "en-US": "action_name"
+            }
+        },
+        "content": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/extensions/content",
+            "name": {
+                "en-US": "content"
+            }
+        },
+        "direction": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/extensions/direction",
+            "name": {
+                "en-US": "direction"
+            }
+        },
+        "enemy_bot_name": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/extensions/enemy_bot_name",
+            "name": {
+                "en-US": "enemy_bot_name"
+            }
+        },
+        "from": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/extensions/from",
+            "name": {
+                "en-US": "from"
+            }
+        },
+        "help": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/extensions/help",
+            "name": {
+                "en-US": "help"
+            }
+        },
+        "level_number": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/extensions/level_number",
+            "name": {
+                "en-US": "level_number"
+            }
+        },
+        "link": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/extensions/link",
+            "name": {
+                "en-US": "link"
+            }
+        },
+        "position": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/extensions/position",
+            "name": {
+                "en-US": "position"
+            }
+        },
+        "reference": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/extensions/reference",
+            "name": {
+                "en-US": "reference"
+            }
+        },
+        "rotation": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/extensions/rotation",
+            "name": {
+                "en-US": "rotation"
+            }
+        },
+        "scale": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/extensions/scale",
+            "name": {
+                "en-US": "scale"
+            }
+        },
+        "state": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/extensions/state",
+            "name": {
+                "en-US": "state"
+            }
+        },
+        "time": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/extensions/time",
+            "name": {
+                "en-US": "time"
+            }
+        },
+        "type": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/extensions/type",
+            "name": {
+                "en-US": "type"
+            }
+        },
+        "value": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/extensions/value",
+            "name": {
+                "en-US": "value"
+            }
+        }
+    },
     "focus": {},
     "grade": {},
     "link": {},
@@ -16,5 +288,195 @@
     "topic": {},
     "type": {},
     "value": {},
-    "verb": {}
+    "verb": {
+        "activated": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/verbs/activated",
+            "name": {
+                "en-US": "activated"
+            }
+        },
+        "attempted": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/verbs/attempted",
+            "name": {
+                "en-US": "attempted"
+            }
+        },
+        "collected": {
+            "description": {
+                "en-US": "indicates the actor collected the object"
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/verbs/collected",
+            "name": {
+                "en-US": "collected"
+            }
+        },
+        "completed": {
+            "description": {
+                "en-US": "indicates that the actor completed a level"
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/verbs/completed",
+            "name": {
+                "en-US": "completed"
+            }
+        },
+        "crouched": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/verbs/crouched",
+            "name": {
+                "en-US": "crouched"
+            }
+        },
+        "deactivated": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/verbs/deactivated",
+            "name": {
+                "en-US": "deactivated"
+            }
+        },
+        "dragged": {
+            "description": {
+                "en-US": "indicates that the actor started dragging the object."
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/verbs/dropped",
+            "name": {
+                "en-US": "dragged"
+            }
+        },
+        "dropped": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/verbs/released",
+            "name": {
+                "en-US": "dropped"
+            }
+        },
+        "exitedhighlight": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/verbs/exitedhighlight",
+            "name": {
+                "en-US": "exitedhighlight"
+            }
+        },
+        "exitedview": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/verbs/exitedview",
+            "name": {
+                "en-US": "exitedview"
+            }
+        },
+        "hacked": {
+            "description": {
+                "en-US": "indicates that the actor hacked a robot"
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/verbs/hacked",
+            "name": {
+                "en-US": "hacked"
+            }
+        },
+        "highlighted": {
+            "description": {
+                "en-US": "indicates that the actor put its cursor over the object."
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/verbs/highlighted",
+            "name": {
+                "en-US": "highlighted"
+            }
+        },
+        "loaded": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/verbs/loaded",
+            "name": {
+                "en-US": "loaded"
+            }
+        },
+        "moved": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/verbs/moved",
+            "name": {
+                "en-US": "moved"
+            }
+        },
+        "placed": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/verbs/placed",
+            "name": {
+                "en-US": "placed"
+            }
+        },
+        "reached": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/verbs/reached",
+            "name": {
+                "en-US": "reached"
+            }
+        },
+        "received": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/verbs/received",
+            "name": {
+                "en-US": "received"
+            }
+        },
+        "run": {
+            "description": {
+                "en-US": "indicates that the actor ran the level"
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/verbs/run",
+            "name": {
+                "en-US": "run"
+            }
+        },
+        "saved": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/verbs/saved",
+            "name": {
+                "en-US": "saved"
+            }
+        },
+        "skipped": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/verbs/skipped",
+            "name": {
+                "en-US": "skipped"
+            }
+        },
+        "stood": {
+            "description": {
+                "en-US": ""
+            },
+            "id": "https://www.lip6.fr/mocah/invaliduri/verbs/stood",
+            "name": {
+                "en-US": "stood"
+            }
+        }
+    }
 }

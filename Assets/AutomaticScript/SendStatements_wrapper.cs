@@ -18,34 +18,19 @@ public class SendStatements_wrapper : BaseWrapper
 		MainLoop.callAppropriateSystemMethod (system, "templateStatement", null);
 	}
 
-	public void LoadLevelStatement(System.String levelNumber)
+	public void LevelCompleteStatement(System.String levelNumber)
 	{
-		MainLoop.callAppropriateSystemMethod (system, "LoadLevelStatement", levelNumber);
+		MainLoop.callAppropriateSystemMethod (system, "LevelCompleteStatement", levelNumber);
 	}
 
-	public void LevelCompleteStatement()
+	public void CollectedObjetStatement(System.String ObjectName)
 	{
-		MainLoop.callAppropriateSystemMethod (system, "LevelCompleteStatement", null);
+		MainLoop.callAppropriateSystemMethod (system, "CollectedObjetStatement", ObjectName);
 	}
 
-	public void ActionDraggredStatement()
+	public void ActivatedDoorStatement(System.String ObjectName)
 	{
-		MainLoop.callAppropriateSystemMethod (system, "ActionDraggredStatement", null);
-	}
-
-	public void CharacterMovedStatement()
-	{
-		MainLoop.callAppropriateSystemMethod (system, "CharacterMovedStatement", null);
-	}
-
-	public void CollectedObjetStatement()
-	{
-		MainLoop.callAppropriateSystemMethod (system, "CollectedObjetStatement", null);
-	}
-
-	public void ActivatedDoorStatement()
-	{
-		MainLoop.callAppropriateSystemMethod (system, "ActivatedDoorStatement", null);
+		MainLoop.callAppropriateSystemMethod (system, "ActivatedDoorStatement", ObjectName);
 	}
 
 	public void HackedRobotStatement()
