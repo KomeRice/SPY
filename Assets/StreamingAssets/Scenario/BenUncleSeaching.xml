@@ -1,4 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <scenario>
   <level name="Levels/BenUncleSeaching/1.xml" />
+  <level name="Levels/BenUncleSeaching/2.xml" />
+  <level name="Levels/BenUncleSeaching/3.xml" />
+  <level name="Levels/BenUncleSeaching/4.xml" />
+  <level name="Levels/BenUncleSeaching/5.xml" />
+  <level name="Levels/BenUncleSeaching/6.xml" />
+  <level name="Levels/BenUncleSeaching/7.xml" />
+  <level name="Levels/BenUncleSeaching/8.xml" />
+  <level name="Levels/BenUncleSeaching/9.xml" />
+  <level name="Levels/BenUncleSeaching/10.xml" />
 </scenario>

@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<level>
+  <map>
+    <line>
+      <cell value="-1" />
+      <cell value="1" />
+      <cell value="1" />
+      <cell value="1" />
+      <cell value="1" />
+      <cell value="1" />
+      <cell value="1" />
+    </line>
+    <line>
+      <cell value="-1" />
+      <cell value="1" />
+      <cell value="3" />
+      <cell value="1" />
+      <cell value="0" />
+      <cell value="1" />
+      <cell value="1" />
+    </line>
+    <line>
+      <cell value="-1" />
+      <cell value="1" />
+      <cell value="0" />
+      <cell value="1" />
+      <cell value="0" />
+      <cell value="0" />
+      <cell value="1" />
+    </line>
+    <line>
+      <cell value="-1" />
+      <cell value="1" />
+      <cell value="0" />
+      <cell value="1" />
+      <cell value="1" />
+      <cell value="0" />
+      <cell value="1" />
+    </line>
+    <line>
+      <cell value="-1" />
+      <cell value="1" />
+      <cell value="0" />
+      <cell value="1" />
+      <cell value="0" />
+      <cell value="0" />
+      <cell value="1" />
+    </line>
+    <line>
+      <cell value="-1" />
+      <cell value="1" />
+      <cell value="2" />
+      <cell value="1" />
+      <cell value="0" />
+      <cell value="1" />
+      <cell value="1" />
+    </line>
+    <line>
+      <cell value="-1" />
+      <cell value="1" />
+      <cell value="1" />
+      <cell value="1" />
+      <cell value="1" />
+      <cell value="1" />
+      <cell value="1" />
+    </line>
+  </map>
+  <dialogs>
+    <dialog text="Système : &#xA;Vous pouvez ordonner des tâches complexes à Beta." />
+  </dialogs>
+  <blockLimits>
+    <blockLimit blockType="Forward" limit="-1" />
+    <blockLimit blockType="TurnLeft" limit="-1" />
+    <blockLimit blockType="TurnRight" limit="-1" />
+    <blockLimit blockType="Wait" limit="-1" />
+    <blockLimit blockType="Activate" limit="-1" />
+    <blockLimit blockType="TurnBack" limit="0" />
+    <blockLimit blockType="IfThen" limit="0" />
+    <blockLimit blockType="IfElse" limit="0" />
+    <blockLimit blockType="ForLoop" limit="0" />
+    <blockLimit blockType="While" limit="0" />
+    <blockLimit blockType="Forever" limit="0" />
+    <blockLimit blockType="AndOperator" limit="0" />
+    <blockLimit blockType="OrOperator" limit="0" />
+    <blockLimit blockType="NotOperator" limit="0" />
+    <blockLimit blockType="WallFront" limit="0" />
+    <blockLimit blockType="WallLeft" limit="0" />
+    <blockLimit blockType="WallRight" limit="0" />
+    <blockLimit blockType="Enemy" limit="0" />
+    <blockLimit blockType="RedArea" limit="0" />
+    <blockLimit blockType="FieldGate" limit="0" />
+    <blockLimit blockType="Terminal" limit="0" />
+    <blockLimit blockType="Exit" limit="0" />
+  </blockLimits>
+  <door posY="2" posX="2" direction="0" slotId="2" />
+  <console state="1" posY="2" posX="5" direction="2">
+    <slot slotId="1" />
+  </console>
+  <door posY="4" posX="2" direction="0" slotId="0" />
+  <console state="1" posY="1" posX="4" direction="0">
+    <slot slotId="2" />
+  </console>
+  <door posY="3" posX="2" direction="0" slotId="1" />
+  <console state="1" posY="4" posX="5" direction="2">
+    <slot slotId="0" />
+  </console>
+  <player associatedScriptName="Alpha" posY="5" posX="2" direction="0" />
+  <player associatedScriptName="Beta" posY="5" posX="4" direction="0" />
+  <script name="Alpha" editMode="2" type="3" />
+  <script name="Beta" editMode="2" type="3" />
+  <score twoStars="0" threeStars="1" />
+</level>
