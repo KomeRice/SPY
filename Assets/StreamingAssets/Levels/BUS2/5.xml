@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<level>
+  <map>
+    <line>
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="0" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="-1" />
+    </line>
+    <line>
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="0" />
+      <cell value="0" />
+      <cell value="0" />
+      <cell value="0" />
+      <cell value="0" />
+      <cell value="-1" />
+      <cell value="-1" />
+    </line>
+    <line>
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="0" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="0" />
+      <cell value="0" />
+      <cell value="0" />
+      <cell value="-1" />
+    </line>
+    <line>
+      <cell value="-1" />
+      <cell value="0" />
+      <cell value="0" />
+      <cell value="0" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="0" />
+      <cell value="0" />
+      <cell value="0" />
+    </line>
+    <line>
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="0" />
+      <cell value="0" />
+      <cell value="0" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="3" />
+      <cell value="-1" />
+    </line>
+    <line>
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="0" />
+      <cell value="0" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="-1" />
+    </line>
+    <line>
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="0" />
+      <cell value="0" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="-1" />
+    </line>
+    <line>
+      <cell value="-1" />
+      <cell value="2" />
+      <cell value="0" />
+      <cell value="0" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="-1" />
+    </line>
+    <line>
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="-1" />
+      <cell value="-1" />
+    </line>
+  </map>
+  <dialogs>
+    <dialog text="Système : &#xA;Une fuite du système de vapeur a entrainé du brouillard dans cette salle.&#xA;On me dit que pour en sortir, avancer 20 fois : vous devez tourner à droite à chaque fois que vous voyez une porte et à gauche lorsque vous voyez une console." />
+  </dialogs>
+  <executionLimit amount="1" />
+  <fog />
+  <blockLimits>
+    <blockLimit blockType="Forward" limit="1" />
+    <blockLimit blockType="TurnLeft" limit="1" />
+    <blockLimit blockType="TurnRight" limit="1" />
+    <blockLimit blockType="Wait" limit="0" />
+    <blockLimit blockType="Activate" limit="0" />
+    <blockLimit blockType="TurnBack" limit="0" />
+    <blockLimit blockType="IfThen" limit="2" />
+    <blockLimit blockType="IfElse" limit="0" />
+    <blockLimit blockType="ForLoop" limit="1" />
+    <blockLimit blockType="While" limit="0" />
+    <blockLimit blockType="Forever" limit="0" />
+    <blockLimit blockType="AndOperator" limit="0" />
+    <blockLimit blockType="OrOperator" limit="0" />
+    <blockLimit blockType="NotOperator" limit="0" />
+    <blockLimit blockType="WallFront" limit="0" />
+    <blockLimit blockType="WallLeft" limit="0" />
+    <blockLimit blockType="WallRight" limit="0" />
+    <blockLimit blockType="Enemy" limit="0" />
+    <blockLimit blockType="RedArea" limit="0" />
+    <blockLimit blockType="FieldGate" limit="1" />
+    <blockLimit blockType="Terminal" limit="1" />
+    <blockLimit blockType="Exit" limit="0" />
+  </blockLimits>
+  <player associatedScriptName="Alpha" posY="7" posX="1" direction="2" />
+  <console state="1" posY="7" posX="3" direction="2">
+    <slot slotId="8" />
+  </console>
+  <door posY="5" posX="3" direction="0" slotId="0" />
+  <console state="1" posY="6" posX="4" direction="2">
+    <slot slotId="8" />
+  </console>
+  <console state="1" posY="4" posX="4" direction="0">
+    <slot slotId="8" />
+  </console>
+  <door posY="4" posX="2" direction="3" slotId="0" />
+  <console state="1" posY="3" posX="3" direction="0">
+    <slot slotId="8" />
+  </console>
+  <door posY="3" posX="1" direction="3" slotId="0" />
+  <door posY="0" posX="2" direction="0" slotId="0" />
+  <door posY="1" posX="6" direction="2" slotId="0" />
+  <console state="1" posY="2" posX="5" direction="1">
+    <slot slotId="8" />
+  </console>
+  <door posY="2" posX="7" direction="2" slotId="0" />
+  <door posY="3" posX="8" direction="2" slotId="0" />
+  <console state="1" posY="3" posX="6" direction="1">
+    <slot slotId="8" />
+  </console>
+  <script name="Alpha" editMode="2" type="2" />
+  <score twoStars="0" threeStars="1" />
+</level>

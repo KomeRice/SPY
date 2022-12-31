@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<scenario>
+  <level name="Levels/BUS2/1.xml" />
+  <level name="Levels/BUS2/2.xml" />
+  <level name="Levels/BUS2/3.xml" />
+  <level name="Levels/BUS2/4.xml" />
+  <level name="Levels/BUS2/5.xml" />
+  <level name="Levels/BUS2/6.xml" />
+  <level name="Levels/BUS2/7.xml" />
+  <level name="Levels/BUS2/8.xml" />
+  <level name="Levels/BUS2/9.xml" />
+  <level name="Levels/BUS2/10.xml" />
+</scenario>
