@@ -66,7 +66,7 @@
     </line>
   </map>
   <dialogs>
-    <dialog text="Système : &#xA;Pour ouvrir une porte, il faut activer le terminal correspondant. Pour cela vous avez accès à la commande activer." />
+    <dialog text="Système : &#xA;Pour ouvrir une porte, il faut activer le terminal correspondant. Pour cela vous avez accès à la commande activer." img="ActivateIcon.png" imgHeight="45" camY="5" camX="1"/>
   </dialogs>
   <executionLimit amount="1" />
   <blockLimits>

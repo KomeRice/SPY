@@ -1,63 +1,36 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0"?>
 <level>
-  <map>
-    <line>
-      <cell value="0" />
-      <cell value="0" />
-      <cell value="0" />
-    </line>
-    <line>
-      <cell value="0" />
-      <cell value="3" />
-      <cell value="0" />
-    </line>
-    <line>
-      <cell value="0" />
-      <cell value="2" />
-      <cell value="0" />
-    </line>
-    <line>
-      <cell value="0" />
-      <cell value="0" />
-      <cell value="0" />
-    </line>
-  </map>
-  <dialogs>
-    <dialog text="Alpha&#xA;Waouh c'est génial, exactement comme tonton me l'avait décrit. Cet endroit est formidable." />
-    <dialog text="Voix mystérieuse :&#xA;Bienvenue à Ayperture Alpha, nous vous avons installé tous les modules. Nous allons procéder aux tests." />
-    <dialog text="Alpha :&#xA;Qui est-ce ?" />
-    <dialog text="Système :&#xA;Je suis l'assistant intelligent qui va vous aider à compléter votre travail. Vous pouvez m'appeler système.&#xA;" />
-    <dialog text="Système :&#xA;Pour pouvoir nous assurer de la fiabilité de nos nouveaux modules,&#xD; &#xA;nous devons faire des tests techniques et vous êtes en charge de ça.&#xD;" />
-    <dialog text="Alpha : &#xA;Qu'est-ce que je dois faire?" />
-    <dialog text="Système :&#xA;Vous devez apprendre à contrôler les modules,&#xA;pour cela vous devez envoyer les bonnes actions.&#xA;Vous pouvez donner des ordres en faisant glisser&#xA;les actions dans la zone de programme&#xA;" />
-    <dialog text="Système : &#xA;Si vous vous trompez vous pouvez utiliser le clic&#xA;droit sur une action du programme pour la&#xA;supprimer, ou nettoyer tout le programme à l'aide de&#xA;la petite balayette.&#xD;&#xA;" />
-    <dialog text="Système :&#xA;Pour vous téléporter dans le prochain test,&#xA;il faut vous diriger sur le téléporteur rouge !" />
-  </dialogs>
-  <blockLimits>
-    <blockLimit blockType="Forward" limit="1" />
-    <blockLimit blockType="TurnLeft" limit="0" />
-    <blockLimit blockType="TurnRight" limit="0" />
-    <blockLimit blockType="Wait" limit="0" />
-    <blockLimit blockType="Activate" limit="0" />
-    <blockLimit blockType="TurnBack" limit="0" />
-    <blockLimit blockType="IfThen" limit="0" />
-    <blockLimit blockType="IfElse" limit="0" />
-    <blockLimit blockType="ForLoop" limit="0" />
-    <blockLimit blockType="While" limit="0" />
-    <blockLimit blockType="Forever" limit="0" />
-    <blockLimit blockType="AndOperator" limit="0" />
-    <blockLimit blockType="OrOperator" limit="0" />
-    <blockLimit blockType="NotOperator" limit="0" />
-    <blockLimit blockType="WallFront" limit="0" />
-    <blockLimit blockType="WallLeft" limit="0" />
-    <blockLimit blockType="WallRight" limit="0" />
-    <blockLimit blockType="Enemy" limit="0" />
-    <blockLimit blockType="RedArea" limit="0" />
-    <blockLimit blockType="FieldGate" limit="0" />
-    <blockLimit blockType="Terminal" limit="0" />
-    <blockLimit blockType="Exit" limit="0" />
-  </blockLimits>
-  <player associatedScriptName="Karl" posY="2" posX="1" direction="0" />
-  <script name="Karl" editMode="0" type="3" />
-  <score twoStars="0" threeStars="10500" />
+    <map>
+        <line><cell value="0" /><cell value="0" /><cell value="0" /></line>
+        <line><cell value="0" /><cell value="3" /><cell value="0" /></line>
+        <line><cell value="0" /><cell value="2" /><cell value="0" /></line>
+        <line><cell value="0" /><cell value="0" /><cell value="0" /></line>
+    </map>
+    <dialogs>
+        <dialog text="23 août 2041...&#xA;&#xA;Vous avez un message..."/>
+        <dialog text="Bonjour agent special !&#xA;&#xA;Nous venons d'apprendre que des documents top-secrets ont été volés et nous devons les récupérer."/>
+        <dialog text="Nous avons envoyé sur le terrain un prototype de robot, son nom de code est Karl." />
+        <dialog text="Pour le contrôler à distance vous devrez lui envoyer les bonnes actions. Vous pouvez donner des ordres à Karl en faisant glisser les actions dans la zone de programme." img="drophere.png" imgHeight="250" />
+        <dialog text="Si vous vous trompez vous pouvez utiliser le clic droit sur une action du programme pour la supprimer, ou nettoyer tout le programme à l'aide de la petite balayette." img="resetButton.png" imgHeight="250"/>
+        <dialog text="Pour téléporter Karl dans le bâtiment vous devez lui commander de se déplacer sur le téléporteur rouge !" />
+        <dialog text="A vous de jouer, essayez d'utiliser l'action 'Avancer' dans la zone de programme du robot et cliquez sur le bouton lecture pour envoyer le programme à Karl." img="FirstActionAndPlay.png" imgHeight="250"/>
+    </dialogs>
+    <blockLimits>
+        <blockLimit blockType="Forward" limit="1" />
+        <blockLimit blockType="OrOperator" limit="0" />
+        <blockLimit blockType="NotOperator" limit="0" />
+        <blockLimit blockType="WallFront" limit="0" />
+        <blockLimit blockType="WallLeft" limit="0" />
+        <blockLimit blockType="WallRight" limit="0" />
+        <blockLimit blockType="Enemy" limit="0" />
+        <blockLimit blockType="RedArea" limit="0" />
+        <blockLimit blockType="FieldGate" limit="0" />
+        <blockLimit blockType="Terminal" limit="0" />
+        <blockLimit blockType="Exit" limit="0" />
+    </blockLimits>
+    <player associatedScriptName="Karl" posY="2" posX="1" direction="0" />
+    <script name="Karl" editMode="0" />
+    <score twoStars="0" threeStars="10500"/>
+    <script name="Karl" editMode="0" type="3" />
+    <score twoStars="0" threeStars="10500" />
 </level>

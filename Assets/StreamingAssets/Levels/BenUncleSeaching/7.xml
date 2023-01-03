@@ -66,7 +66,7 @@
     </line>
   </map>
   <dialogs>
-    <dialog text="Système : &#xA;Essayons maintenant avec deux portes.&#xA;Vous pouvez aussi utiliser l'action pour vous retourner." />
+    <dialog text="Système : &#xA;Essayons maintenant avec deux portes.&#xA;Vous pouvez aussi utiliser l'action pour vous retourner." img="TurnBackIcon.png" imgHeight="45"/>
   </dialogs>
   <blockLimits>
     <blockLimit blockType="Forward" limit="-1" />

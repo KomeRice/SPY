@@ -38,7 +38,7 @@
     </line>
   </map>
   <dialogs>
-    <dialog text="Système : &#xA;Bravo ! Vous êtes maintenant dans le 2 eme test.&#xA;Vous pouvez donner plusieurs ordres avant d'exécuter" />
+    <dialog text="Système : &#xA;Bravo ! Vous êtes maintenant dans le 2 eme test.&#xA;Vous pouvez donner plusieurs ordres avant d'exécuter" img="stackActions.png" imgHeight="250"/>
   </dialogs>
   <blockLimits>
     <blockLimit blockType="Forward" limit="3" />

@@ -102,7 +102,7 @@
     </line>
   </map>
   <dialogs>
-    <dialog text="Système :&#xA;Nous nous sommes rendu compte de la quantité d'action que vous devez accomplir. Nous venons de vous installer un module pour faciliter la tâche." />
+    <dialog text="Système :&#xA;Nous nous sommes rendu compte de la quantité d'action que vous devez accomplir. Nous venons de vous installer un module pour faciliter la tâche." img="forExample.png" imgHeight="200" />
     <dialog text="Système :&#xA;Une boucle sert à accomplir une action un nombre précis de fois. A vous de spécifier le nombre avant de lancer le robot." />
   </dialogs>
   <executionLimit amount="1" />

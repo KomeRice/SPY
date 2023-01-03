@@ -29,9 +29,9 @@
     <dialog text="Système :&#xA;Je suis l'assistant intelligent qui va vous aider à compléter votre travail. Vous pouvez m'appeler système.&#xA;" />
     <dialog text="Système :&#xA;Pour pouvoir nous assurer de la fiabilité de nos nouveaux modules,&#xD; &#xA;nous devons faire des tests techniques et vous êtes en charge de ça.&#xD;" />
     <dialog text="Alpha : &#xA;Qu'est-ce que je dois faire?" />
-    <dialog text="Système :&#xA;Vous devez apprendre à contrôler les modules,&#xA;pour cela vous devez envoyer les bonnes actions.&#xA;Vous pouvez donner des ordres en faisant glisser&#xA;les actions dans la zone de programme&#xA;" />
-    <dialog text="Système : &#xA;Si vous vous trompez vous pouvez utiliser le clic&#xA;droit sur une action du programme pour la&#xA;supprimer, ou nettoyer tout le programme à l'aide de&#xA;la petite balayette.&#xD;&#xA;" />
-    <dialog text="Système :&#xA;Pour vous téléporter dans le prochain test,&#xA;il faut vous diriger sur le téléporteur rouge !" />
+    <dialog text="Système :&#xA;Vous devez apprendre à contrôler les modules,&#xA;pour cela vous devez envoyer les bonnes actions.&#xA;Vous pouvez donner des ordres en faisant glisser&#xA;les actions dans la zone de programme&#xA; " img="drophere.png" imgHeight="250" />
+    <dialog text="Système : &#xA;Si vous vous trompez vous pouvez utiliser le clic&#xA;droit sur une action du programme pour la&#xA;supprimer, ou nettoyer tout le programme à l'aide de&#xA;la petite balayette.&#xD;&#xA;" img="resetButton.png" imgHeight="250"/>
+    <dialog text="Système :&#xA;Pour vous téléporter dans le prochain test,&#xA;il faut vous diriger sur le téléporteur rouge !" img="FirstActionAndPlay.png" imgHeight="250"/>
   </dialogs>
   <blockLimits>
     <blockLimit blockType="Forward" limit="1" />

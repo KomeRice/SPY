@@ -39,6 +39,7 @@
   </map>
   <dialogs>
     <dialog text="Système :&#xA;Continuez à avancer." />
+    <dialog text="Système :&#xA;Vous pouvez aussi à tout moment accéder au menu de la mission pour, par exemple, revoir les textes d'introduction, relancer la mission ou la quitter." img="menu.png" imgHeight="250"/>
   </dialogs>
   <blockLimits>
     <blockLimit blockType="Forward" limit="4" />

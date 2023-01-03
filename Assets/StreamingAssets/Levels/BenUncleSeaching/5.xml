@@ -67,6 +67,7 @@
   </map>
   <dialogs>
     <dialog text="Système :&#xA;Maintenant que vous avez compris, &#xA;rendons la tâche plus dur." />
+    <dialog text="Système :&#xA;J'ai oubié de vous donner une astuce, vous pouvez double-cliquer sur les blocs de l'inventaire pour les ajouter automatiquement au programme." />
   </dialogs>
   <blockLimits>
     <blockLimit blockType="Forward" limit="-1" />
