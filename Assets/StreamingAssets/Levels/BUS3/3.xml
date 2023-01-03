@@ -65,6 +65,9 @@
       <cell value="1" />
     </line>
   </map>
+  <dialogs>
+    <dialog text="Alpha :&#xA;Il bouge !&#xA;Essayons de traverser sans qu'il nous attrape." />
+  </dialogs>
   <blockLimits>
     <blockLimit blockType="Forward" limit="-1" />
     <blockLimit blockType="TurnLeft" limit="-1" />

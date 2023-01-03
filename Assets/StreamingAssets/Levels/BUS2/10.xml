@@ -101,13 +101,16 @@
       <cell value="1" />
     </line>
   </map>
+  <dialogs>
+    <dialog text="Système :&#xA;Bravo! Vous devez être sûrement à l'aise avec les commandes. Voici un défi pour vous, si vous n'arrivez pas à le résoudre en une fois, vous pouvez faire en plusieurs étapes." />
+  </dialogs>
   <blockLimits>
     <blockLimit blockType="Forward" limit="-1" />
     <blockLimit blockType="TurnLeft" limit="-1" />
     <blockLimit blockType="TurnRight" limit="-1" />
     <blockLimit blockType="Wait" limit="0" />
     <blockLimit blockType="Activate" limit="-1" />
-    <blockLimit blockType="TurnBack" limit="0" />
+    <blockLimit blockType="TurnBack" limit="-1" />
     <blockLimit blockType="IfThen" limit="-1" />
     <blockLimit blockType="IfElse" limit="-1" />
     <blockLimit blockType="ForLoop" limit="-1" />
