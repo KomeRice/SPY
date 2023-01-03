@@ -91,47 +91,6 @@ public class SendStatements : FSystem {
         });
     }
     
-    /*A mettre a la completion d'un niveau levelnumber = niveau */
-    public void LevelCompleteStatement(string levelNumber)
-    {
-        GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
-        {
-            verb = "completed",
-            objectType = "level",
-            activityExtensions = new Dictionary<string, string>() {
-                { "level_number", levelNumber }
-            }
-        });
-    }
-
-
-
-
-    /*A mettre quand on collecte un objet*/
-    public void CollectedObjetStatement(string ObjectName)
-    {
-        GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
-        {
-            verb = "collected",
-            objectType = "key",
-            activityExtensions = new Dictionary<string, string>() {
-                { "value", ObjectName },
-            }
-        });
-    }
-    
-    /*A mettre quand on active une porte*/
-    public void ActivatedDoorStatement(string ObjectName)
-    {
-        GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
-        {
-            verb = "activated",
-            objectType = "key",
-            activityExtensions = new Dictionary<string, string>() {
-                { "value", ObjectName },
-            }
-        });
-    }
     
     /*pas mettre pour l'instant*/
     public void HackedRobotStatement(string botId, string time)
@@ -142,19 +101,6 @@ public class SendStatements : FSystem {
             objectType = "enemyBot",
             activityExtensions = new Dictionary<string, string>() {
                 { "enemy_bot_name", botId },
-                { "time", time },
-            }
-        });
-    }
-    
-    /*Mettre pour lorsque l'on atteint lobjectif dans un niveau*/
-    public void ReachedTPStatement(string time)
-    {
-        GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
-        {
-            verb = "reached",
-            objectType = "teleporter",
-            activityExtensions = new Dictionary<string, string>() {
                 { "time", time },
             }
         });

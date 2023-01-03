@@ -17,4 +17,14 @@ public class EndGameManager_wrapper : BaseWrapper
 		MainLoop.callAppropriateSystemMethod (system, "cancelEnd", null);
 	}
 
+	public void LevelCompleteStatement()
+	{
+		MainLoop.callAppropriateSystemMethod (system, "LevelCompleteStatement", null);
+	}
+
+	public void ReachedTPStatement(System.String time)
+	{
+		MainLoop.callAppropriateSystemMethod (system, "ReachedTPStatement", time);
+	}
+
 }

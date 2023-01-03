@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using FYFY;
 using System.Collections;
+using System.Collections.Generic;
 using FYFY_plugins.TriggerManager;
 
 /// <summary>
@@ -36,9 +37,23 @@ public class CoinManager : FSystem {
                     gameData.totalCoin++;
                     target.GetComponent<AudioSource>().Play();
                     MainLoop.instance.StartCoroutine(coinDestroy(target));					
-				}
+                    CollectedObjetStatement($"coin_{gameData.totalCoin}");
+                }
 			}			
 		}
+    }
+	
+    /*A mettre quand on collecte un objet*/
+    public void CollectedObjetStatement(string ObjectName)
+    {
+        GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
+        {
+            verb = "collected",
+            objectType = "key",
+            activityExtensions = new Dictionary<string, string>() {
+                { "value", ObjectName },
+            }
+        });
     }
 
 	private IEnumerator coinDestroy(GameObject go){

@@ -287,14 +287,15 @@ public class TitleScreenSystem : FSystem {
 		}
 	}
 	
-	public void LoadLevelStatement(string levelNumber)
+	public void LoadLevelStatement(string levelNumber, string campaignKey)
 	{
 		GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
 		{
 			verb = "loaded",
 			objectType = "level",
 			activityExtensions = new Dictionary<string, string>() {
-				{ "level_number", levelNumber }
+				{ "level_number", levelNumber },
+				{ "value", campaignKey}
 			}
 		});
 	}
@@ -303,7 +304,7 @@ public class TitleScreenSystem : FSystem {
 		gameData.scenarioName = campaignKey;
 		gameData.levelToLoad = levelToLoad;
 		gameData.scenario = defaultCampaigns[campaignKey];
-		LoadLevelStatement(levelToLoad);
+		LoadLevelStatement(levelToLoad, campaignKey);
 		GameObjectManager.loadScene("MainScene");
 	}
 

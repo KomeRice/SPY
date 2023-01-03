@@ -14,4 +14,9 @@ public class DoorAndConsoleManager_wrapper : BaseWrapper
 		MainLoop.initAppropriateSystemField (system, "pathOff", pathOff);
 	}
 
+	public void ActivatedDoorStatement(System.String ObjectName)
+	{
+		MainLoop.callAppropriateSystemMethod (system, "ActivatedDoorStatement", ObjectName);
+	}
+
 }
