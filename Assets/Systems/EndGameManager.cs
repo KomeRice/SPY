@@ -261,14 +261,16 @@ public class EndGameManager : FSystem {
 	
     /*A mettre a la completion d'un niveau levelnumber = niveau */
     public void LevelCompleteStatement(string levelNumber, int totalSteps, int totalBlocsUsed)
-    {
+    {//Ajouter ici le code pour recup le script de l'user dans content en string
+	    string content="";
         GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
         {
             verb = "completed",
             objectType = "level",
             activityExtensions = new Dictionary<string, string>() {
                 { "level_number", levelNumber },
-                { "value", $"steps {totalSteps}, blocsUsed {totalBlocsUsed}" }
+                { "value", $"steps {totalSteps}, blocsUsed {totalBlocsUsed}" },
+                {"content", content}
             }
         });
     }

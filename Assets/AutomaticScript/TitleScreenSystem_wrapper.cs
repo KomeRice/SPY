@@ -34,9 +34,9 @@ public class TitleScreenSystem_wrapper : BaseWrapper
 		MainLoop.callAppropriateSystemMethod (system, "updateScenarioList", null);
 	}
 
-	public void LoadLevelStatement(System.String levelNumber)
+	public void LoadLevelStatement()
 	{
-		MainLoop.callAppropriateSystemMethod (system, "LoadLevelStatement", levelNumber);
+		MainLoop.callAppropriateSystemMethod (system, "LoadLevelStatement", null);
 	}
 
 	public void launchLevel()

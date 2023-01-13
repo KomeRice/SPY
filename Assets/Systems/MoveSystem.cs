@@ -59,20 +59,7 @@ public class MoveSystem : FSystem {
 		foreach (ForceMoveAnimation forceMove in go.GetComponentsInChildren<ForceMoveAnimation>(true))
 			GameObjectManager.removeComponent(forceMove);
 	}
-
-	public void CharacterMovedStatement(string position,  string rotation, string direction)
-	{
-		GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
-		{
-			verb = "moved",
-			objectType = "avatar",
-			activityExtensions = new Dictionary<string, string>() {
-				{ "position", position },
-				{"rotation",rotation},
-				{"direction",direction}
-			}
-		});
-	}
+	
 	
 	private void playMoveAnimation(GameObject go)
     {
