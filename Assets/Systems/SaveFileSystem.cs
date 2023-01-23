@@ -262,7 +262,8 @@ public class SaveFileSystem : FSystem
 		return result;
 	}
 
-	private XElement getXmlScript(GameObject cur, string name, XAttribute attribute = null)
+	// Static methods could be moved out
+	public static XElement getXmlScript(GameObject cur, string name, XAttribute attribute = null)
 	{
 		var result = new XElement(name);
 		if(attribute != null)
@@ -335,7 +336,7 @@ public class SaveFileSystem : FSystem
 		return result;
 	}
 
-	private XElement getXmlCondition(GameObject cur)
+	private static XElement getXmlCondition(GameObject cur)
 	{
 		var captor = cur.GetComponent<BaseCaptor>();
 		string name;
@@ -436,7 +437,7 @@ public class SaveFileSystem : FSystem
 		return result;
 	}
 
-	private XElement getXmlAction(BasicAction.ActionType type)
+	private static XElement getXmlAction(BasicAction.ActionType type)
 	{
 		var actionString = type switch
 		{

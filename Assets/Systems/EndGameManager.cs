@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using System.IO;
+using System.Xml.Linq;
 
 /// <summary>
 /// This system check if the end of the level is reached and display end panel accordingly
@@ -74,11 +75,14 @@ public class EndGameManager : FSystem {
 						nbEnd++;
 						// if all players reached end position
 						if (nbEnd >= f_exit.Count)
+						{
 							// trigger end
-							GameObjectManager.addComponent<NewEnd>(MainLoop.instance.gameObject, new { endType = NewEnd.Win });
-						
+							GameObjectManager.addComponent<NewEnd>(MainLoop.instance.gameObject,
+								new {endType = NewEnd.Win});
+							LevelCompleteStatement(gameData.scenarioName, gameData.totalStep, gameData.totalActionBlocUsed);
+						}
+
 						ReachedTPStatement("");
-						LevelCompleteStatement(gameData.scenarioName, gameData.totalStep, gameData.totalActionBlocUsed);
 					}
 				}
 			}
@@ -261,8 +265,20 @@ public class EndGameManager : FSystem {
 	
     /*A mettre a la completion d'un niveau levelnumber = niveau */
     public void LevelCompleteStatement(string levelNumber, int totalSteps, int totalBlocsUsed)
-    {//Ajouter ici le code pour recup le script de l'user dans content en string
-	    string content="";
+    {
+	    var scripts = new List<string>();
+
+	    for (var i = 0; i < gameData.actionsHistory.transform.childCount; i++)
+	    {
+		    var editorViewportScriptContainer = gameData.actionsHistory.transform.GetChild(i).Find("ScriptContainer");
+			var header = editorViewportScriptContainer.Find("Header");
+			var scriptName = header.Find("ContainerName").GetComponent<TMP_InputField>().text;
+			var scriptNode = SaveFileSystem.getXmlScript(editorViewportScriptContainer.gameObject, "script",
+				new XAttribute("name", scriptName));
+			scripts.Add(scriptNode.ToString());
+	    }
+	    var content = string.Join("\n", scripts);
+	    
         GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new 
         {
             verb = "completed",
