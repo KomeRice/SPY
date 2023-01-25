@@ -87,6 +87,7 @@ public class EditorLevelDataSystem : FSystem {
 	{
 		if (!getData().requireRefresh) 
 			return;
+		getData().requireRefresh = false;
 		
 		executionLimitContainer.GetComponentInChildren<Toggle>().isOn = getData().executionLimitEnabled;
 		if(getData().executionLimitEnabled)
@@ -97,7 +98,6 @@ public class EditorLevelDataSystem : FSystem {
 		if (!getData().scoreEnabled) return;
 		scoreContainer.transform.GetChild(1).GetComponent<InputField>().text = getData().scoreTwoStars.ToString(); 
 		scoreContainer.transform.GetChild(2).GetComponent<InputField>().text = getData().scoreThreeStars.ToString();
-		getData().requireRefresh = false;
 	}
 
 	public void hideToggleChanged(int index)
